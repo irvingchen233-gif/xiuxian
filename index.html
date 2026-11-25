@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>挂机修仙录</title>
-<!-- 4399 H5 SDK：上架后由平台注入；本地预览无此脚本时自动走模拟广告 -->
 <script src="https://cdn.h5wan.4399sj.com/h5web-frame/dist/static/js/api.js"></script>
 <style>
   :root{
@@ -18,49 +17,122 @@
     background:radial-gradient(1200px 800px at 50% -10%, #2b2135, var(--bg));
     color:var(--text); font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
     max-width:680px;margin:0 auto; min-height:100%; padding-bottom:84px;
+    overflow-x:hidden;
   }
-  header{padding:14px 16px 10px; position:sticky; top:0; background:linear-gradient(180deg,#1a1420 85%,transparent); z-index:10}
+  header{padding:14px 16px 10px; position:sticky; top:0; background:linear-gradient(180deg,#1a1420 88%,rgba(26,20,32,0)); z-index:10}
   .title{font-size:18px;font-weight:700;color:var(--gold);letter-spacing:2px}
-  .stat-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;flex:1;min-width:100px}
+  .stat-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;flex:1;min-width:110px}
   .stat .k{font-size:11px;color:var(--muted)}
   .stat .v{font-size:16px;font-weight:700;margin-top:2px}
-  .stat .v.small{font-size:14px}
-  .buffs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;min-height:24px}
+  .buffs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
   .buff{font-size:12px;padding:3px 8px;border-radius:6px;background:var(--panel2);border:1px solid var(--line)}
   main{padding:0 16px}
   .tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 0;scrollbar-width:none}
   .tabs::-webkit-scrollbar{display:none}
-  .tab{flex:0 0 auto;padding:7px 13px;border-radius:16px;background:var(--panel);border:1px solid var(--line);font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+  .tab{flex:0 0 auto;padding:7px 13px;border-radius:16px;background:var(--panel);border:1px solid var(--line);font-size:13px;color:var(--muted);cursor:pointer}
   .tab.active{background:var(--gold2);color:#1a1420;border-color:var(--gold);font-weight:700}
-  .view{animation:fade .18s}
-  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .view{display:none}
+  .view.active{display:block}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
   .card h3{font-size:14px;color:var(--gold);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .fold{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .fold-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer;user-select:none}
+  .fold-head:hover{background:var(--panel2)}
+  .fold-head .ft{font-size:14px;font-weight:600;color:var(--gold)}
+  .fold-head .arrow{color:var(--muted);transition:transform .2s;font-size:12px}
+  .fold.open .fold-head .arrow{transform:rotate(90deg)}
+  .fold-body{padding:0 12px 12px}
+  .fold:not(.open) .fold-body{display:none}
+  .fold .card{margin-bottom:6px;border:none;background:transparent;padding:6px 2px}
+  .scroll-box{max-height:320px;overflow-y:auto;padding-right:4px}
   .row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line);gap:10px}
   .row:last-child{border-bottom:none}
   .row .info{flex:1;min-width:0}
   .row .name{font-size:14px}
   .row .desc{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5}
-  .btn{flex:0 0 auto;border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;background:var(--panel2);color:var(--text);border:1px solid var(--line);white-space:nowrap}
+  .btn{flex:0 0 auto;border:none;border-radius:8px;padding:8px 12px;font-size:13px;cursor:pointer;background:var(--panel2);color:var(--text);border:1px solid var(--line);font-family:inherit}
   .btn.gold{background:var(--gold2);color:#1a1420;font-weight:700;border-color:var(--gold)}
   .btn:disabled{opacity:.4;cursor:not-allowed}
-  .tag{font-size:11px;padding:2px 7px;border-radius:6px;margin-left:4px;white-space:nowrap}
   .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
   .num{font-variant-numeric:tabular-nums}
-  .lock{color:var(--muted)}
-  footer{position:fixed;bottom:0;left:0;right:0;background:#1a1420;border-top:1px solid var(--line);padding:10px 16px;text-align:center;font-size:11px;color:var(--muted)}
-  .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#000d;border:1px solid var(--gold);color:var(--text);padding:10px 16px;border-radius:10px;font-size:13px;z-index:300;max-width:80%;text-align:center;display:none}
-  .mask{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;z-index:200;padding:24px}
-  .modal{background:var(--panel);border:1px solid var(--gold2);border-radius:14px;padding:16px;width:100%;max-width:360px;animation:fade .15s}
-  .modal-title{color:var(--gold);font-weight:700;margin-bottom:10px;font-size:15px}
-  .modal-body{font-size:13px;line-height:1.9;color:var(--text)}
-  .modal-actions{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
+  footer{position:fixed;bottom:0;left:0;right:0;background:#1a1420;border-top:1px solid var(--line);padding:10px 16px;text-align:center;font-size:11px;color:var(--muted);z-index:20}
+  .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#000d;border:1px solid var(--gold);color:var(--text);padding:10px 16px;border-radius:10px;font-size:13px;z-index:999;max-width:80%;text-align:center;line-height:1.5}
   .bar{height:6px;background:var(--panel2);border-radius:4px;overflow:hidden;margin-top:4px}
   .bar>i{display:block;height:100%;background:var(--gold);border-radius:4px;transition:width .3s}
+  .npc{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .npc:last-child{border-bottom:none}
+  .npc-avatar{flex:0 0 46px;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--panel2);border:1px solid var(--line)}
+  .npc-body{flex:1;min-width:0}
+  .npc-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .npc-name{font-size:14px;font-weight:700}
+  .npc-title{font-size:11px;color:var(--muted)}
+  .npc-aff{font-size:11px;color:var(--gold);flex:0 0 auto}
+  .npc-line{font-size:12px;color:var(--text);margin:6px 0;line-height:1.6;min-height:18px}
+  .npc-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .npc-actions .btn{padding:6px 10px;font-size:12px}
+  .aff-bar{height:4px;background:var(--panel2);border-radius:3px;margin-top:5px;overflow:hidden}
+  .aff-bar>i{display:block;height:100%;background:var(--green);border-radius:3px}
+  .zone{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .zone:last-child{border-bottom:none}
+  .zone-icon{flex:0 0 46px;width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--panel2);border:1px solid var(--line)}
+  .zone-body{flex:1;min-width:0}
+  .zone-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .zone-name{font-size:14px;font-weight:700}
+  .zone-risk{font-size:11px;padding:2px 7px;border-radius:6px;border:1px solid currentColor}
+  .zone-desc{font-size:12px;color:var(--muted);margin:4px 0;line-height:1.5}
+  .zone-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .zone-actions .btn{padding:6px 10px;font-size:12px}
+  .stamina-bar{height:8px;background:var(--panel2);border-radius:4px;overflow:hidden;margin:6px 0}
+  .stamina-bar>i{display:block;height:100%;background:var(--blue);border-radius:4px;transition:width .3s}
+  .log{font-size:12px;color:var(--muted);line-height:1.7}
+  .log div{padding:3px 0;border-bottom:1px dashed var(--line)}
+  .log div:last-child{border-bottom:none}
+  .prog-bar{height:6px;background:var(--panel2);border-radius:4px;overflow:hidden;margin:6px 0}
+  .prog-bar>i{display:block;height:100%;background:var(--purple);border-radius:4px;transition:width .3s}
+  .modal-mask{position:fixed;inset:0;background:#000c;display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+  .modal{background:var(--panel);border:1px solid var(--gold);border-radius:14px;max-width:440px;width:100%;padding:16px;max-height:82vh;overflow-y:auto}
+  .modal h3{color:var(--gold);font-size:16px;margin-bottom:8px}
+  .modal-desc{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+  .sect-opt{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--panel2)}
+  .sect-opt.locked{opacity:.55}
+  .sect-icon{flex:0 0 40px;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--panel)}
+  .sect-info{flex:1;min-width:0}
+  .sect-name{font-size:14px;font-weight:700}
+  .sect-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+  .sect-mat{font-size:11px;color:var(--gold);margin-top:2px}
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+  .battle-log{margin:10px 0;font-size:12px;line-height:1.7;color:var(--muted);max-height:160px;overflow-y:auto}
+  .splash{position:fixed;inset:0;z-index:500;overflow:hidden;background:radial-gradient(1200px 800px at 50% -10%, #2b2135, var(--bg));display:flex;align-items:center;justify-content:center;padding:24px;transition:opacity .4s}
+  .qi-field{position:absolute;inset:0;pointer-events:none}
+  .qi{position:absolute;bottom:-40px;border-radius:50%;background:radial-gradient(circle, rgba(232,196,118,.95), rgba(232,196,118,0));filter:blur(1px);box-shadow:0 0 12px 2px rgba(232,196,118,.35);animation:qiFloat linear infinite}
+  .qi.cyan{background:radial-gradient(circle, rgba(124,205,124,.9), rgba(124,205,124,0));box-shadow:0 0 12px 2px rgba(124,205,124,.3)}
+  @keyframes qiFloat{
+    0%{transform:translate3d(0,0,0) scale(.6);opacity:0}
+    12%{opacity:.9}
+    50%{transform:translate3d(24px,-50vh,0) scale(1);opacity:.65}
+    100%{transform:translate3d(-16px,-108vh,0) scale(.8);opacity:0}
+  }
+  .splash-inner{position:relative;z-index:2;text-align:center;max-width:320px;width:100%}
+  .splash-logo{font-size:56px;margin-bottom:18px}
+  .splash-title{font-size:34px;font-weight:800;color:var(--gold);letter-spacing:6px;margin-bottom:12px;text-shadow:0 2px 12px rgba(232,196,118,.3)}
+  .splash-sub{color:var(--muted);font-size:14px;letter-spacing:3px;margin-bottom:34px}
+  .splash-btn{width:100%;padding:13px 0;font-size:16px;letter-spacing:4px}
+  .empty{font-size:12px;color:var(--muted);padding:10px 0;text-align:center}
+  .tag{font-size:11px;padding:2px 7px;border-radius:6px;margin-left:6px;border:1px solid currentColor}
 </style>
 </head>
 <body>
+
+<div class="splash" id="splash">
+  <div class="qi-field" id="qiField"></div>
+  <div class="splash-inner">
+    <div class="splash-logo">🗡️</div>
+    <div class="splash-title">挂机修仙录</div>
+    <div class="splash-sub">一念修仙 · 挂机长生</div>
+    <button class="btn gold splash-btn" onclick="enterGame()">进入游戏</button>
+  </div>
+</div>
 
 <header>
   <div class="title">挂机修仙录</div>
@@ -68,13 +140,9 @@
     <div class="stat"><div class="k">灵力</div><div class="v num" id="spirit">0</div></div>
     <div class="stat"><div class="k">每秒产出</div><div class="v num" id="perSec">0</div></div>
     <div class="stat"><div class="k">境界</div><div class="v" id="levelName">凡人</div></div>
-    <div class="stat" style="flex:0 0 auto;min-width:80px"><div class="k">仙材</div><div class="v num small" id="material">0</div></div>
+    <div class="stat"><div class="k">战力</div><div class="v num" id="cp">0</div></div>
   </div>
-  <div class="buffs" id="buffs">
-    <span class="buff" id="buffLuck"></span>
-    <span class="buff" id="buffPill" style="display:none;color:var(--orange)"></span>
-    <span class="buff" id="buffDex" style="color:var(--gold)"></span>
-  </div>
+  <div class="buffs" id="buffs"></div>
 </header>
 
 <main>
@@ -86,21 +154,46 @@
 
 <script>
 /* ============================================================
- *  配置表（保持原数值，便于对照）
+ *  一、配置表
  * ============================================================ */
 const levelConfig = [
   {name:"凡人",       spiritPerSec:10,    cost:500},
-  {name:"炼气一层",   spiritPerSec:18,    cost:2500},
-  {name:"炼气二层",   spiritPerSec:32,    cost:10000},
-  {name:"炼气三层",   spiritPerSec:55,    cost:40000},
+  {name:"炼气初期",   spiritPerSec:18,    cost:2500},
+  {name:"炼气中期",   spiritPerSec:32,    cost:10000},
+  {name:"炼气后期",   spiritPerSec:55,    cost:40000},
+  {name:"炼气圆满",   spiritPerSec:80,    cost:90000},
   {name:"筑基初期",   spiritPerSec:90,    cost:160000},
   {name:"筑基中期",   spiritPerSec:145,   cost:650000},
   {name:"筑基后期",   spiritPerSec:230,   cost:2600000},
+  {name:"筑基圆满",   spiritPerSec:300,   cost:6000000},
   {name:"金丹初期",   spiritPerSec:360,   cost:10500000},
   {name:"金丹中期",   spiritPerSec:540,   cost:42000000},
   {name:"金丹后期",   spiritPerSec:800,   cost:170000000},
-  {name:"元婴",       spiritPerSec:1200,  cost:0},
+  {name:"金丹圆满",   spiritPerSec:1000,  cost:400000000},
+  {name:"元婴初期",   spiritPerSec:1200,  cost:900000000,  trib:true},
+  {name:"元婴中期",   spiritPerSec:1500,  cost:2000000000},
+  {name:"元婴后期",   spiritPerSec:1900,  cost:4500000000},
+  {name:"元婴圆满",   spiritPerSec:2400,  cost:10000000000},
+  {name:"化神初期",   spiritPerSec:3000,  cost:22000000000, trib:true, req:{reinc:2, secret:20, material:5000,  dregs:100, passive:"huashen"}},
+  {name:"化神中期",   spiritPerSec:3800,  cost:50000000000},
+  {name:"化神后期",   spiritPerSec:4800,  cost:110000000000},
+  {name:"化神圆满",   spiritPerSec:6000,  cost:250000000000},
+  {name:"炼虚初期",   spiritPerSec:7500,  cost:550000000000, trib:true, req:{reinc:4, secret:36, material:30000, dregs:200, luck:30, passive:"lianxu"}},
+  {name:"炼虚中期",   spiritPerSec:9500,  cost:1200000000000},
+  {name:"炼虚后期",   spiritPerSec:12000, cost:2600000000000},
+  {name:"炼虚圆满",   spiritPerSec:15000, cost:5800000000000},
+  {name:"合体初期",   spiritPerSec:19000, cost:12000000000000, trib:true, req:{reinc:6, secret:52, material:120000,dregs:350, luck:60, passive:"heti"}},
+  {name:"合体中期",   spiritPerSec:24000, cost:26000000000000},
+  {name:"合体后期",   spiritPerSec:30000, cost:56000000000000},
+  {name:"合体圆满",   spiritPerSec:38000, cost:120000000000000},
+  {name:"大乘初期",   spiritPerSec:48000, cost:260000000000000, trib:true, req:{reinc:8, secret:68, material:500000,dregs:500, luck:100, passive:"dacheng"}},
+  {name:"大乘中期",   spiritPerSec:60000, cost:560000000000000},
+  {name:"大乘后期",   spiritPerSec:76000, cost:1200000000000000},
+  {name:"大乘圆满",   spiritPerSec:95000, cost:2600000000000000},
+  {name:"渡劫境",     spiritPerSec:0,     cost:0, locked:true},
 ];
+const LEGACY_LEVEL_MAP = [0,1,2,3,5,6,7,9,10,11,13];
+const MAX_PLAYABLE_LEVEL = levelConfig.length-2;
 
 const secretConfig = [
   {reward:300}, {reward:1200}, {reward:5000}, {reward:20000}, {reward:80000},
@@ -108,12 +201,23 @@ const secretConfig = [
 ];
 
 const rootConfig = [
-  {name:"杂灵根",   rate:1.00, weight:45,  color:"#ffffff"},
-  {name:"凡灵根",   rate:1.15, weight:30,  color:"#7ccd7c"},
-  {name:"良灵根",   rate:1.35, weight:15,  color:"#6495ed"},
-  {name:"异灵根",   rate:1.60, weight:7,   color:"#9932cc"},
-  {name:"先天灵根", rate:2.00, weight:2.5, color:"#ff8c00"},
-  {name:"混沌灵根", rate:2.60, weight:0.5, color:"#ffd700"},
+  {name:"杂灵根",   rate:1.00, weight:45,  adWeight:12, color:"#ffffff"},
+  {name:"凡灵根",   rate:1.15, weight:30,  adWeight:24, color:"#7ccd7c"},
+  {name:"良灵根",   rate:1.35, weight:15,  adWeight:28, color:"#6495ed"},
+  {name:"异灵根",   rate:1.60, weight:7,   adWeight:20, color:"#9932cc"},
+  {name:"先天灵根", rate:2.00, weight:2.5, adWeight:10, color:"#ff8c00"},
+  {name:"混沌灵根", rate:2.60, weight:0.5, adWeight:6,  color:"#ffd700"},
+];
+
+const sectConfig = [
+  {id:"sword", name:"剑修", icon:"⚔️", color:"#9fd8ff", matName:"剑意残片",
+   desc:"以剑入道，攻伐凌厉，在线修行攻速愈快。"},
+  {id:"body",  name:"体修", icon:"🪨", color:"#6495ed", matName:"淬体精金",
+   desc:"炼皮炼骨，肉身成圣，离线淬炼愈加固实。"},
+  {id:"demon", name:"魔修", icon:"🩸", color:"#e06c6c", matName:"魔魄精血",
+   desc:"以魔证道，高风险高回报，秘境收获霸道。"},
+  {id:"law",   name:"法修", icon:"📜", color:"#e8c476", matName:"法诀玉简",
+   desc:"万法归一，参悟功法，灵气运转圆融无碍。"},
 ];
 
 const reincConfig = [
@@ -141,13 +245,80 @@ const skillConfig = [
   {name:"鸿蒙诀", rate:1.25, cost:65000000},
 ];
 
+const BATTLE_SKILL_MAX_LV = 5;
+const battleSkillConfig = [
+  {name:"破金诀", element:"metal",  atk:14, def:3,  hp:25, rate:1.03, cost:50000,  insightCost:40, desc:"金行锋锐，主攻伐"},
+  {name:"缠木功", element:"wood",   atk:4,  def:10, hp:45, rate:1.02, cost:50000,  insightCost:40, desc:"木行生生，主防守续航"},
+  {name:"弱水诀", element:"water",  atk:7,  def:8,  hp:35, rate:1.03, cost:60000,  insightCost:45, desc:"水行流转，攻守兼备"},
+  {name:"炎阳诀", element:"fire",   atk:15, def:2,  hp:20, rate:1.04, cost:60000,  insightCost:45, desc:"火行暴烈，强攻高胜"},
+  {name:"厚土功", element:"earth",  atk:3,  def:14, hp:50, rate:1.02, cost:50000,  insightCost:40, desc:"土行厚重，主坚壁"},
+];
+function skillUpgradeCost(lv){ return 20*lv; }
+
+const petConfig = [
+  {name:"金鳞雕", icon:"🦅", element:"metal", atk:10, def:2,  hp:15, cost:30000, desc:"金行迅疾，助你强攻"},
+  {name:"青灵狐", icon:"🦊", element:"wood",  atk:6,  def:4,  hp:30, cost:30000, desc:"木行灵动，攻守均衡"},
+  {name:"玄水龟", icon:"🐢", element:"water", atk:3,  def:8,  hp:35, cost:35000, desc:"水行沉稳，续航坚韧"},
+  {name:"火翎雀", icon:"🔥", element:"fire",  atk:11, def:1,  hp:12, cost:35000, desc:"火翎灼目，暴烈突袭"},
+  {name:"山岩熊", icon:"🐻", element:"earth", atk:2,  def:10, hp:40, cost:30000, desc:"土行厚壁，扛伤御敌"},
+];
+
+const partnerNamePool = [
+  {name:"沈青梧", icon:"🌾", sect:"散修",   note:"独行山野的女剑修，性清冷"},
+  {name:"陆离",   icon:"🍃", sect:"散修",   note:"行踪诡秘的散人，亦正亦邪"},
+  {name:"楚昭",   icon:"⚔️", sect:"玄剑宗", note:"玄剑宗外门弟子，争强好胜"},
+  {name:"苏蘅",   icon:"🌿", sect:"万药谷", note:"万药谷药园弟子，心慈善药"},
+  {name:"韩铸",   icon:"🛡️", sect:"玄甲宗", note:"玄甲宗淬体弟子，憨厚耿直"},
+  {name:"白玑",   icon:"🔮", sect:"天机阁", note:"天机阁推演弟子，谈吐机锋"},
+  {name:"叶归鸿", icon:"🪶", sect:"散修",   note:"浪迹四方的游侠，重诺守信"},
+  {name:"秦络",   icon:"🗡️", sect:"散修",   note:"出身魔修一脉，神色寡淡"},
+];
+const PARTNER_FAV_MAX = 100, PARTNER_FAV_MIN = -100;
+
+const mentorConfig = [
+  {id:"daoist",    name:"玄机子",   icon:"☯", title:"道途尊者", color:"#e8c476",
+   mult:1.08, ask:"spirit",   askLabel:"请教道法", desc:"传道解惑，在线修行产出 +8%，请教得灵力"},
+  {id:"smelter",   name:"铸器宗师", icon:"🔨", title:"炼器宗匠", color:"#6495ed",
+   mult:1.05, ask:"material", askLabel:"请教器道", desc:"指点器道，产出 +5%，请教得仙材"},
+  {id:"alchemist", name:"丹道真人", icon:"🌿", title:"培元丹师", color:"#7ccd7c",
+   mult:1.05, ask:"dregs",    askLabel:"请教丹道", desc:"传授丹理，产出 +5%，请教得丹渣"},
+];
+
+const originConfig = [
+  {id:"orphan",  name:"仙门遗孤", icon:"🏔️", color:"#9fd8ff",
+   mods:{online:1.08, offline:1.05, atk:5,  def:0,  hp:0},
+   desc:"自幼被仙门收养，根基扎实，在线与离线修行皆有加成。"},
+  {id:"woodcutter", name:"山野樵子", icon:"🪵", color:"#7ccd7c",
+   mods:{online:1.05, offline:0.95, atk:0,  def:0,  hp:30},
+   desc:"生于山野，体魄强健，气血偏厚，悟性与离线稍逊。"},
+  {id:"scholar", name:"书香世家", icon:"📜", color:"#e8c476",
+   mods:{online:0.97, offline:1.0,  atk:0,  def:8,  hp:0},
+   desc:"饱读道籍，心细沉稳，防御见长，攻伐与进境略缓。"},
+  {id:"general", name:"武将之后", icon:"⚔️", color:"#e06c6c",
+   mods:{online:0.95, offline:1.0,  atk:12, def:4,  hp:0},
+   desc:"将门血脉，攻伐勇猛，攻防俱佳，修行进度稍缓。"},
+  {id:"demon",   name:"魔缘缠身", icon:"🌑", color:"#9932cc",
+   mods:{online:1.12, offline:0.90, atk:8,  def:0,  hp:-20},
+   desc:"身负魔缘，进境神速却气血有损、离线低迷，利弊相随。"},
+  {id:"mortal",  name:"凡俗布衣", icon:"🍃", color:"#9a8fa3",
+   mods:{online:1.0,  offline:1.0,  atk:0,  def:0,  hp:0},
+   desc:"寻常人家出身，无偏无倚，一切从头自悟。"},
+];
+function rollOrigin(){ return originConfig[Math.floor(Math.random()*originConfig.length)]; }
+function originMod(k){
+  if(!playerData.origin) return (k==="online"||k==="offline") ? 1 : 0;
+  const m = playerData.origin.mods || {};
+  return m[k] || ((k==="online"||k==="offline") ? 1 : 0);
+}
+function originBonus(){ return {online:originMod("online"), offline:originMod("offline"), atk:originMod("atk"), def:originMod("def"), hp:originMod("hp")}; }
+
 const luckConfig = [
-  {name:"气运平平", rate:1.00, weight:50,  color:"#9a8fa3"},
-  {name:"灵气缠身", rate:1.20, weight:22,  color:"#7ccd7c"},
-  {name:"道心通明", rate:1.40, weight:10,  color:"#6495ed"},
-  {name:"天降福缘", rate:1.70, weight:3,   color:"#ffd700"},
-  {name:"心魔扰神", rate:0.85, weight:12,  color:"#e06c6c"},
-  {name:"浊气侵体", rate:0.70, weight:3,   color:"#9932cc"},
+  {name:"气运平平", rate:1.00, weight:50},
+  {name:"灵气缠身", rate:1.20, weight:22},
+  {name:"道心通明", rate:1.40, weight:10},
+  {name:"天降福缘", rate:1.70, weight:3},
+  {name:"心魔扰神", rate:0.85, weight:12},
+  {name:"浊气侵体", rate:0.70, weight:3},
 ];
 
 const pillConfig = [
@@ -163,6 +334,51 @@ const equipConfig = [
   {name:"聚灵壶", base:1.03, step:0.012, maxLv:10},
   {name:"纳灵袋", base:1.04, step:0.015, maxLv:10},
 ];
+
+const artifactConfig = [
+  {id:"sword",    name:"诛仙古剑", icon:"⚔️", color:"#e8c476", element:"metal",  unlockLevel:5, base:1.03, step:0.015, maxLv:12, desc:"攻伐杀伐，本命同损同荣，提升产出与战力"},
+  {id:"mirror",   name:"玄灵宝镜", icon:"🪞", color:"#6495ed", element:"water",  unlockLevel:5, base:1.03, step:0.015, maxLv:12, desc:"照见幽冥，勘破虚妄，提升产出与战力"},
+  {id:"cauldron", name:"乾坤鼎",  icon:"🏺", color:"#7ccd7c", element:"earth",  unlockLevel:5, base:1.03, step:0.015, maxLv:12, desc:"炼化天地，纳灵入鼎，提升产出与战力"},
+  {id:"bell",     name:"摄魂灵铃", icon:"🔔", color:"#9932cc", element:"wood",   unlockLevel:5, base:1.03, step:0.015, maxLv:12, desc:"铃音摄魂，万法随行，提升产出与战力"},
+];
+const ARTIFACT_YUANYING_LV = 6;
+
+const equipSlots = [
+  {id:"weapon",  name:"武器", icon:"⚔️", main:"atk"},
+  {id:"armor",   name:"战甲", icon:"🛡️", main:"def"},
+  {id:"pendant", name:"玉佩", icon:"📿", main:"hp"},
+  {id:"robe",    name:"内衬", icon:"🥋", main:"bal"},
+];
+const qualityConfig = [
+  {name:"凡品", color:"#c8c8c8", mult:1.00},
+  {name:"灵品", color:"#7ccd7c", mult:1.30},
+  {name:"宝品", color:"#6495ed", mult:1.70},
+  {name:"玄品", color:"#9932cc", mult:2.20},
+  {name:"地品", color:"#ff8c00", mult:2.90},
+];
+const equipNamePool = {
+  weapon:["斩妖剑","青锋刀","落星枪","玄铁锏"],
+  armor:["鳞皮甲","玄铁铠","流云铠","藤心甲"],
+  pendant:["护身玉","灵玉佩","避尘璜","血沁璧"],
+  robe:["蚕丝内衬","麻布道袍","灵丝衣","浣尘纱"],
+};
+
+const elementConfig = [
+  {id:"metal", name:"金", color:"#e8c476"},
+  {id:"wood",  name:"木", color:"#7ccd7c"},
+  {id:"water", name:"水", color:"#6495ed"},
+  {id:"fire",  name:"火", color:"#e06c6c"},
+  {id:"earth", name:"土", color:"#c9a36a"},
+];
+const elementKe = {metal:"wood", wood:"earth", earth:"water", water:"fire", fire:"metal"};
+function elementOf(id){ return elementConfig.find(e=>e.id===id) || elementConfig[0]; }
+const oreConfig = {
+  metal: {name:"金精矿", icon:"🪙"},
+  wood:  {name:"木灵石", icon:"🌿"},
+  water: {name:"水灵髓", icon:"💧"},
+  fire:  {name:"火炎石", icon:"🔥"},
+  earth: {name:"土魄岩", icon:"🪨"},
+};
 
 const dexConfig = [
   {name:"青石灵蝶", floor:0, rate:1.02, color:"#ffffff", desc:"秘境边缘常见灵蝶，翅带微光"},
@@ -198,6 +414,9 @@ const achievementConfig = [
   {id:9,  name:"灵根觉醒", type:"collect",   rewardSpirit:100000,  rewardMat:1200,  desc:"洗练灵根累计5次"},
   {id:10, name:"功法百家", type:"collect",   rewardSpirit:80000000, rewardMat:40000, desc:"解锁全部8本功法"},
   {id:11, name:"法宝初成", type:"collect",   rewardSpirit:2500000, rewardMat:5000,  desc:"任意一件法宝升到5级"},
+  {id:12, name:"万道归身", type:"cultivate", rewardSpirit:500000000,rewardMat:100000,desc:"修成大乘"},
+  {id:13, name:"本命合一", type:"collect",   rewardSpirit:20000000,rewardMat:20000, desc:"铸就一件本命法宝"},
+  {id:14, name:"雷劫金身", type:"trib",      rewardSpirit:80000000,rewardMat:60000, desc:"渡劫成功 3 次"},
 ];
 
 const dailyTaskConfig = [
@@ -208,64 +427,252 @@ const dailyTaskConfig = [
   {id:4, name:"参悟功法", type:"unlockSkill", target:1,     rewardSpirit:20000, rewardMat:600, desc:"解锁任意功法1本"},
 ];
 
+const npcConfig = [
+  {id:"xuanji", name:"玄机子", title:"云游老者", icon:"☯", color:"#e8c476",
+   intro:"行踪不定的游方老者，观气运、断吉凶，常提点迷途修士。",
+   lines:["修行之路，欲速则不达，且稳住道心。","老夫观你印堂发亮，今日或有机缘临门。","灵气聚散自有定数，强求不得，静待其时。","轮回并非终结，而是洗练道心的又一程。"],
+   giftType:"spirit", giftBase: 60, questTab:"修行", questHint:"求签问运"},
+  {id:"qingwu", name:"青芜", title:"丹道修士", icon:"🌿", color:"#7ccd7c",
+   intro:"栖居山间的女丹师，善炼培元丹药，性情温和。",
+   lines:["炼丹最讲究火候，急火攻心，丹药便废了。","仙材不可浪掷，先辨药性，再入丹炉。","你若炼成新丹，记得拿来给我瞧瞧。","丹药只助一时修行，根基还需自己打牢。"],
+   giftType:"spirit", giftBase: 40, questTab:"炼丹", questHint:"炼制丹药"},
+  {id:"zhanshan", name:"砧山", title:"铸器之灵", icon:"🔨", color:"#6495ed",
+   intro:"沉眠器坊的铸器灵体，以仙材淬炼法宝，力撼山岳。",
+   lines:["法宝如身躯，须日日温养，方能与神魂相合。","仙材越纯，铸出的法宝威能越盛。","想炼好器，先舍得下本钱打磨。","你那件法宝，尚可再进一阶。"],
+   giftType:"material", giftBase: 20, questTab:"炼器", questHint:"升级法宝"},
+  {id:"baize", name:"白泽", title:"秘境守灵", icon:"🦊", color:"#9932cc",
+   intro:"镇守秘境的上古灵识，通晓其中灵物与道痕。",
+   lines:["秘境深处多有凶险，莫要贪功冒进。","那些灵物的形神，收录图鉴便算是你的缘法。","今日秘境之中，灵气似有涌动。","通关越深，所得仙材与机缘越丰厚。"],
+   giftType:"material", giftBase: 15, questTab:"秘境", questHint:"通关秘境"},
+  {id:"yeli", name:"夜漓", title:"魔修散人", icon:"🌙", color:"#e06c6c",
+   intro:"游走正邪之间的魔修散人，行事诡谲，交易皆带风险。",
+   lines:["天道太迂腐，力量本就该自己争来。","想换好处？就得担点风险，敢不敢赌？","本座见过太多道貌岸然之辈，不如你坦荡。","代价与回报，从来都是一体两面。"],
+   giftType:"gamble", giftBase: 0, questTab:"秘境", questHint:"风险交易"},
+];
+
+const npcRank = [
+  {need:0, name:"初识", mult:1.00},
+  {need:2, name:"熟识", mult:1.15},
+  {need:5, name:"亲近", mult:1.30},
+  {need:9, name:"知己", mult:1.50},
+];
+
+const exploreConfig = [
+  {id:"forest", name:"城郊野林", icon:"🌲", color:"#7ccd7c", unlockLevel:0, risk:"低", riskColor:"#7ccd7c",
+   desc:"灵气微薄的郊外林野，适合初入仙道者历练。", staminaCost:2, duration:10,
+   spirit:[80,260], material:[10,30], matId:"law", ore:"wood",
+   events:{ gather:40, herb:25, beast:20, fortune:10, hazard:5 }},
+  {id:"bodycliff", name:"淬体崖", icon:"🪨", color:"#6495ed", unlockLevel:0, risk:"低", riskColor:"#7ccd7c",
+   desc:"岩壁粗砺，适合打熬筋骨，偶有淬体精金嵌于石缝。", staminaCost:2, duration:10,
+   spirit:[90,280], material:[12,35], matId:"body", ore:"earth",
+   events:{ gather:38, herb:24, beast:22, fortune:10, hazard:6 }},
+  {id:"swordpath", name:"剑阁栈道", icon:"⚔️", color:"#9fd8ff", unlockLevel:1, risk:"低", riskColor:"#7ccd7c",
+   desc:"沿山壁凿出的古栈道，剑修遗留的剑意凝为残片。", staminaCost:2, duration:10,
+   spirit:[100,300], material:[12,35], matId:"sword", ore:"metal",
+   events:{ gather:36, herb:22, beast:24, fortune:12, hazard:6 }},
+  {id:"bonepath", name:"幽骨小径", icon:"🦴", color:"#e06c6c", unlockLevel:3, risk:"低", riskColor:"#7ccd7c",
+   desc:"荒骨遍布的僻静小径，阴凝之气中偶聚魔魄精血。", staminaCost:2, duration:12,
+   spirit:[120,340], material:[14,40], matId:"demon", ore:"water",
+   events:{ gather:34, herb:20, beast:26, fortune:13, hazard:7 }},
+  {id:"valley", name:"雾泽幽谷", icon:"🌫️", color:"#6495ed", unlockLevel:7, risk:"中", riskColor:"#6495ed",
+   desc:"云雾缭绕的幽谷，多生灵药，亦有精怪盘踞。", staminaCost:3, duration:16,
+   spirit:[400,1200], material:[40,90], matId:"body", ore:"water",
+   events:{ gather:30, herb:30, beast:22, fortune:12, hazard:6 }},
+  {id:"waste", name:"赤炎荒原", icon:"🔥", color:"#ff8c00", unlockLevel:11, risk:"高", riskColor:"#ff8c00",
+   desc:"赤地千里的荒原，火行灵气浓烈，妖兽凶悍。", staminaCost:4, duration:22,
+   spirit:[2000,6000], material:[120,260], matId:"demon", ore:"fire",
+   events:{ gather:25, herb:22, beast:30, fortune:15, hazard:8 }},
+  {id:"ice", name:"玄冰秘境", icon:"❄️", color:"#9fd8ff", unlockLevel:15, risk:"高", riskColor:"#9fd8ff",
+   desc:"万年不化的冰原秘境，暗藏上古遗府与寒魄。", staminaCost:5, duration:28,
+   spirit:[9000,26000], material:[300,600], matId:"sword", ore:"metal",
+   events:{ gather:22, herb:24, beast:28, fortune:18, hazard:8 }},
+  {id:"rift", name:"虚空裂隙", icon:"🌀", color:"#9932cc", unlockLevel:20, risk:"凶险", riskColor:"#9932cc",
+   desc:"连通异界的空间裂隙，机缘与陨落只在一线之间。", staminaCost:6, duration:35,
+   spirit:[40000,120000], material:[800,1600], matId:"random", ore:"earth",
+   events:{ gather:18, herb:20, beast:32, fortune:22, hazard:8 }},
+];
+
 const SETTING = {
   maxOfflineHour: 8,
   adSpeedHour: 1,
   adSpeedDailyLimit: 5,
   adSecretDailyLimit: 3,
   secretFreeCount: 3,
+  maxStamina: 200,
+  staminaRegenSec: 60,
+  adStaminaLimit: 3,
+  sweepFreeCount: 2,
+  adSweepLimit: 2,
+  luckPerOnlineSec: 60,
+  luckPerSecret: 2,
+  luckPerDaily: 5,
+  luckDrawCost: 10,
+  luckLockCost: 20,
+  luckLockMin: 30,
+  eventCheckSec: 60,
+  eventChance: 0.16,
+  eventCooldownSec: 90,
+  eventDailyLimit: 8,
+  tribBaseRate: 0.70,
+  tribRateDrop: 0.05,
+  tribFailLoss: 0.15,
+  tribRewardSec: 120,
+  adTribLimit: 1,
 };
 
+const randomEventConfig = [
+  {id:"spring", icon:"⛲", color:"#7ccd7c", title:"山林灵泉",
+   desc:"山壁间涌出一眼灵泉，水汽氤氲，泉边生着几株灵药。",
+   options:[
+     {label:"汲取灵泉", desc:"引灵泉入体，获一份灵力", fx:[{type:"spirit", sec:120}]},
+     {label:"采集灵药", desc:"采下泉边灵药，获一批仙材", fx:[{type:"material", n:1}]}
+   ]},
+  {id:"beast", icon:"🐺", color:"#e06c6c", title:"妖兽拦路",
+   desc:"一头妖兽自林间窜出，拦住去路，目露凶光。",
+   options:[
+     {label:"拔剑迎战", desc:"凭境界修为一战，胜则斩获颇丰，败则折损灵力", fx:[{type:"battle"}]},
+     {label:"绕道避让", desc:"不惹事端，安然离去，一无所获", fx:[]}
+   ]},
+  {id:"master", icon:"🧙", color:"#e8c476", title:"高人指点",
+   desc:"一位云游高人驻足看你片刻，似有提点之意。",
+   options:[
+     {label:"躬身请益", desc:"聆听指点，心境澄明，气运值增加", fx:[{type:"luck", n:6}]},
+     {label:"献材求教", desc:"奉上仙材求教，换得灵力与气运", fx:[{type:"spendMaterial", amt:100},{type:"spirit", sec:200},{type:"luck", n:3}]}
+   ]},
+  {id:"ruin", icon:"🏚️", color:"#9932cc", title:"古修遗府",
+   desc:"荆棘掩映着一座残破遗府，似藏有遗存，亦可能有机关陷阱。",
+   options:[
+     {label:"入室探查", desc:"深入探查，仙材丹渣颇丰，15% 触发陷阱", fx:[{type:"material", n:1},{type:"dregs", n:15},{type:"trap", rate:0.15}]},
+     {label:"外围捡拾", desc:"只在外围搜寻，所得有限但安全", fx:[{type:"material", n:0.5}]}
+   ]},
+  {id:"caravan", icon:"🐫", color:"#6495ed", title:"游方商队",
+   desc:"一队游方商队歇脚道旁，愿意以物易物。",
+   options:[
+     {label:"以材换灵", desc:"耗仙材换取一份灵力", fx:[{type:"spendMaterial", amt:120},{type:"spirit", sec:300}]},
+     {label:"以渣换运", desc:"耗丹渣换取气运值", fx:[{type:"spendDregs", amt:20},{type:"luck", n:8}]}
+   ]},
+  {id:"heart", icon:"🌀", color:"#e06c6c", title:"心魔夜袭",
+   desc:"静坐时心魔骤起，幻象丛生，是镇压还是炼化，全在一念。",
+   options:[
+     {label:"静心镇压", desc:"稳住道心，驱散心魔，气运值增加", fx:[{type:"luck", n:4}]},
+     {label:"炼化心魔", desc:"强行炼化，高风险高回报；30% 反噬损失灵力", fx:[{type:"spirit", sec:180},{type:"luck", n:4},{type:"backlash", rate:0.30}]}
+   ]},
+  {id:"encounter", icon:"🤝", color:"#7ccd7c", title:"同道相逢",
+   desc:"山道旁遇见一名修士，或为散修，或出身宗门，彼此打量，似可结交一番。",
+   options:[
+     {label:"上前结交", desc:"互通名姓，结为伙伴，初始好感 10", fx:[{type:"meetPartner"}]},
+     {label:"擦肩而过", desc:"各行其道，互不打扰", fx:[]}
+   ]},
+  {id:"vein", icon:"⛏️", color:"#c9a24e", title:"隐矿灵脉",
+   desc:"山石开裂，露出一处隐藏小型灵矿，散发浓郁五行气息。",
+   options:[
+     {label:"倾力开采", desc:"采得一批五行矿石，所得颇丰", fx:[{type:"ore", n:4}]},
+     {label:"留下标记", desc:"记下矿点，日后再来，气运略增", fx:[{type:"luck", n:5}]}
+   ]},
+  {id:"stele", icon:"🪨", color:"#9a8fa3", title:"先贤残碑",
+   desc:"一块古老石碑刻着残缺功法道韵，晦涩难懂，凝神品读似有所悟。",
+   options:[
+     {label:"静心参悟", desc:"感悟大幅增长", fx:[{type:"insight", n:15}]},
+     {label:"拓印带走", desc:"携拓片缓缓研读，气运与感悟小增", fx:[{type:"luck", n:12},{type:"insight", n:5}]}
+   ]},
+  {id:"valley", icon:"🌺", color:"#f08bb4", title:"药香幽谷",
+   desc:"幽谷长满珍稀仙材，隐约有妖兽盘踞，花香与腥气交织。",
+   options:[
+     {label:"冒险采摘", desc:"大量仙材，可能惊动妖兽一战", fx:[{type:"material", n:1.2},{type:"battle"}]},
+     {label:"远采外围", desc:"只取外围植株，少量仙材但安全", fx:[{type:"material", n:0.5}]}
+   ]},
+  {id:"cub", icon:"🐣", color:"#7ccd7c", title:"幼兽迷途",
+   desc:"一只受伤的灵幼兽与族群失散，怯生生望着你，低鸣不止。",
+   options:[
+     {label:"温柔照料带回", desc:"结缘一只灵宠", fx:[{type:"pet"}]},
+     {label:"指引它归山", desc:"目送它寻回族群，气运增加", fx:[{type:"luck", n:8}]}
+   ]},
+  {id:"thunder", icon:"🌩️", color:"#6495ed", title:"云间听雷",
+   desc:"天边雷云汇聚，并非天劫，而是天地自然雷霆道韵，轰鸣震耳。",
+   options:[
+     {label:"引雷入体感悟", desc:"感悟高额获取，30% 灵力受损", fx:[{type:"insight", n:10},{type:"backlash", rate:0.30}]},
+     {label:"远远观览记法", desc:"安全观摩，气运增加", fx:[{type:"luck", n:10}]}
+   ]},
+  {id:"mentorMeet", icon:"🎓", color:"#e8c476", title:"师门缘法",
+   desc:"一位修为精深的修士见你根骨尚可，似有收徒传道之意，观你道心是否虔诚。",
+   options:[
+     {label:"躬身拜师", desc:"拜入其门下，得常驻修行加成，每日可请教一次", fx:[{type:"appointMentor"}]},
+     {label:"婉言谢绝", desc:"宁愿自行摸索，不立师门", fx:[]}
+   ]},
+  {id:"apprenticeMeet", icon:"🌱", color:"#7ccd7c", title:"可塑之材",
+   desc:"一名少年修士在旁观摩你修行，眼神恳切，似想拜入你门下听你指点。",
+   options:[
+     {label:"收为弟子", desc:"纳入门下，悉心教导，弟子日后按忠诚回馈修行资源", fx:[{type:"takeApprentice"}]},
+     {label:"指点几句便别过", desc:"只赠几句心得，不收为徒", fx:[{type:"luck", n:3}]}
+   ]},
+  {id:"relic", icon:"🗡️", color:"#e8c476", title:"遗落神兵",
+   desc:"荒草间一件灵光黯淡的旧法宝静卧泥土，似是前世脱落的器物，可重炼为普通兵器。",
+   options:[
+     {label:"收回兵器", desc:"重炼为普通武器，随本轮修行使用", fx:[{type:"relicWeapon"}]},
+     {label:"留在原处", desc:"暂不收取，留待他日机缘", fx:[]}
+   ]}
+];
+
+const heritageConfig = [
+  {id:"offline", name:"离线灵蕴", desc:"每级离线收益 +8%",   maxLv:5, per:0.08},
+  {id:"secret",  name:"秘境深耕", desc:"每级秘境灵力 +10%",  maxLv:5, per:0.10},
+  {id:"ad",      name:"广告机缘", desc:"每级广告奖励 +8%",   maxLv:5, per:0.08},
+  {id:"mat",     name:"灵脉传承", desc:"每级仙材获取 +8%",   maxLv:5, per:0.08},
+  {id:"pill",    name:"丹道精粹", desc:"每级丹药倍率 +6%",   maxLv:5, per:0.06},
+  {id:"luck",    name:"气运通达", desc:"每级抽取/锁定气运 -2 点消耗", maxLv:3, per:0},
+];
+
+const guildConfig = [
+  {id:"swordhall", name:"玄剑宗", icon:"⚔️", color:"#9fd8ff", quest:"secret",
+   desc:"剑修云集，讲求攻伐迅捷。常驻在线产出 +6%。", online:1.06},
+  {id:"herbvalley", name:"万药谷", icon:"🌿", color:"#7ccd7c", quest:"makePill",
+   desc:"炼丹圣地，丹药惠利深厚。丹药倍率 +6%，丹渣产出 +20%。", pill:1.06, dreg:1.20},
+  {id:"aegis", name:"玄甲宗", icon:"🛡️", color:"#6495ed", quest:"explore",
+   desc:"炼体大宗，根基稳固。离线 +6%，仙材获取 +6%。", offline:1.06, mat:1.06},
+  {id:"astrolabe", name:"天机阁", icon:"🔮", color:"#e8c476", quest:"luck",
+   desc:"推演气运，参悟天机。功法倍率 +6%，气运获取 +20%。", skill:1.06, luck:1.20},
+];
+const GUILD_CONTRIB_REWARD = 20;
+const guildShopConfig = [
+  {id:"mat",  name:"仙材包", cost:30, give:{material:200},  desc:"兑换 200 仙材"},
+  {id:"dreg", name:"丹渣包", cost:30, give:{dregs:30},      desc:"兑换 30 丹渣"},
+  {id:"luck", name:"气运包", cost:30, give:{luckPoints:10}, desc:"兑换 10 气运值"},
+];
+const guildRankConfig = [
+  {name:"外门弟子", earned:0,    rate:1.00},
+  {name:"内门弟子", earned:100,  rate:1.02},
+  {name:"核心弟子", earned:300,  rate:1.04},
+  {name:"宗门长老", earned:600,  rate:1.06},
+  {name:"亲传弟子", earned:1000, rate:1.08},
+];
+
+const constitutionConfig = [
+  {id:"wind",    name:"疾风体质", icon:"💨", color:"#9fd8ff", online:1.05,
+   desc:"身形迅捷，在线产出 +5%。", cond:{type:"secret",     target:5},  hint:"通关秘境第 5 层"},
+  {id:"rock",    name:"磐石体质", icon:"🪨", color:"#6495ed", offline:1.05,
+   desc:"气血沉凝，离线收益 +5%。", cond:{type:"onlineSec",  target:3600}, hint:"累计修行 1 小时"},
+  {id:"wisdom",  name:"慧根体质", icon:"📖", color:"#9932cc", skill:1.05,
+   desc:"悟性超群，功法倍率 +5%。", cond:{type:"washRoot",    target:5},  hint:"累计洗练灵根 5 次"},
+  {id:"cauldron",name:"丹鼎体质", icon:"⚗️", color:"#7ccd7c", dreg:1.25,
+   desc:"腹藏丹炉，丹渣产出 +25%。", cond:{type:"makePill",  target:10}, hint:"累计炼丹 10 次"},
+  {id:"reinc",   name:"轮回体质", icon:"☯️", color:"#e8c476", reinc:1.08,
+   desc:"历劫不灭，转生总倍率 +8%。", cond:{type:"reinc",     target:1},  hint:"完成 1 次转生"},
+  {id:"guild",   name:"宗门护体", icon:"🏅", color:"#e06c6c", all:1.03,
+   desc:"宗门加持，全产出 +3%。", cond:{type:"guild",        target:1},  hint:"加入任意宗门"},
+];
+
 /* ============================================================
- *  工具函数
+ *  二、玩家数据
  * ============================================================ */
-function el(tag, cls, html){
-  const e = document.createElement(tag);
-  if(cls) e.className = cls;
-  if(html !== undefined) e.innerHTML = html;
-  return e;
-}
+let playerData = defaultData();
 
-function fmt(n){
-  n = Math.floor(Number(n) || 0);
-  if(n < 10000) return n.toString();
-  const units = ["万","亿","兆","京","垓"];
-  let u = -1, v = n;
-  while(v >= 10000 && u < units.length-1){ v /= 10000; u++; }
-  return (v < 10 ? v.toFixed(2) : v < 100 ? v.toFixed(1) : v.toFixed(0)) + units[u];
-}
-
-function fmtTime(ms){
-  const s = Math.max(0, Math.ceil(ms / 1000));
-  if(s >= 3600){
-    return Math.floor(s/3600) + "小时" + Math.floor((s%3600)/60) + "分";
-  }
-  return Math.floor(s/60) + "分" + (s%60) + "秒";
-}
-
-function todayKey(){
-  const d = new Date();
-  return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-}
-
-function clampNum(v, min, max, def){
-  v = Number(v);
-  if(!isFinite(v)) return def;
-  return Math.min(max, Math.max(min, v));
-}
-
-/* ============================================================
- *  玩家数据
- * ============================================================ */
 function defaultData(){
   return {
     lastLeaveTime: 0,
     spirit: 0,
     level: 0,
-
     secretMaxFloor: 0,
     secretTodayCount: SETTING.secretFreeCount,
-    secretDoubleUsed: false,   // 修复：每次通关只允许翻倍一次
     adSpeedToday: 0,
     adSecretToday: 0,
 
@@ -284,1074 +691,2852 @@ function defaultData(){
     pillEndTime: 0,
     equipLv: [0,0,0],
 
-    achCompleted: [],          // 数字=已完成，字符串"id_claimed"=已领取
+    achCompleted: [],
+    achClaimed: [],
     washRootTotal: 0,
 
-    dailyResetDay: "",         // 修复：改为完整日期字符串
+    dailyResetDay: 0,
     dailyProgress: [0,0,0,0,0],
     dailyClaimed: [false,false,false,false,false],
     onlineAcc: 0,
-    onlineTickLast: 0,
+    onlineTickLast: Date.now(),
 
     dexCollected: [],
     dexGuarantee: false,
 
-    _offlineGain: 0,           // 运行时字段，不持久化
-    _offlineSec: 0,
+    npcAffinity: {},
+    npcDailyGifted: {},
+    npcLine: {},
+
+    stamina: SETTING.maxStamina,
+    staminaLastTick: Date.now(),
+    staminaAcc: 0,
+    exploreZone: "",
+    exploreEndTime: 0,
+    autoExplore: false,
+    autoZone: "",
+    exploreLog: [],
+    zoneVisited: {},
+    adStaminaToday: 0,
+
+    sect: "",
+    sectMaterials: { sword:0, body:0, demon:0, law:0 },
+    swordOnlineAcc: 0,
+    bodyOnlineAcc: 0,
+
+    reincPoints: 0,
+    heritage: { offline:0, secret:0, ad:0, mat:0, pill:0, luck:0 },
+
+    dregs: 0,
+
+    luckPoints: 0,
+    luckLockedUntil: 0,
+    luckAccSec: 0,
+
+    sweepToday: 0,
+    adSweepToday: 0,
+
+    guild: "",
+    guildContrib: 0,
+    guildContribEarned: 0,
+    guildQuestDone: false,
+
+    constitution: [],
+    totalOnlineSec: 0,
+    pillMadeTotal: 0,
+
+    realmVersion: 2,
+    realmPassive: { huashen:false, lianxu:false, heti:false, dacheng:false },
+
+    artifactId: "",
+    artifactLv: 0,
+    weapons: [],
+    droppedArtifacts: [],
+
+    inventory: [],
+    loadout: { weapon:null, armor:null, pendant:null, robe:null },
+    element: elementConfig[Math.floor(Math.random()*elementConfig.length)].id,
+    equipUid: 1,
+
+    ore: { metal:0, wood:0, water:0, fire:0, earth:0 },
+
+    battleSkillUnlocked: [],
+    battleSkill: -1,
+    battleSkillLv: {},
+    insight: 0,
+    artifactElement: "",
+
+    pets: [],
+    activePet: -1,
+
+    partners: [],
+    partnerUid: 1,
+    mentor: null,
+    mentorAskToday: 0,
+    apprentice: null,
+    origin: null,
+    originShown: false,
+    foldState: {},
+
+    tribWin: 0,
+    tribFail: 0,
+    adTribToday: 0,
+
+    eventPending: null,
+    eventCooldownUntil: 0,
+    eventTodayCount: 0,
+    eventCheckAcc: 0,
   };
 }
 
-let playerData = defaultData();
+/* ============================================================
+ *  三、通用 UI 工具
+ * ============================================================ */
+function el(tag, cls, id){
+  const e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(id) e.id = id;
+  return e;
+}
+let _toastTimer = null;
+function toast(msg){
+  let t = document.getElementById("toastBox");
+  if(!t){
+    t = el("div","toast"); t.id = "toastBox";
+    t.style.display = "none";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.display = "block";
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(()=>{ t.style.display = "none"; }, 2400);
+}
+function fmt(n){
+  n = Math.floor(n);
+  if(!isFinite(n)) return "0";
+  if(n < 10000) return n.toString();
+  const units = ["万","亿","兆"];
+  let u = -1, v = n;
+  while(v >= 10000 && u < units.length-1){ v /= 10000; u++; }
+  return v.toFixed(v<10?2:v<100?1:0) + units[u];
+}
+function fmtDur(sec){
+  sec = Math.floor(sec);
+  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60);
+  if(h>0) return `${h}时${m}分`;
+  if(m>0) return `${m}分${sec%60}秒`;
+  return `${sec}秒`;
+}
+function fmtTime(ms){
+  const s = Math.max(0, Math.ceil(ms/1000));
+  const m = Math.floor(s/60), sec = s%60;
+  return m + "分" + sec + "秒";
+}
+function randInt(arr){ return Math.floor(arr[0] + Math.random()*(arr[1]-arr[0]+1)); }
+
+/* 折叠面板（带展开状态记忆） */
+function foldPanel(id, title, renderBody, defaultOpen){
+  const isOpen = playerData.foldState[id] !== undefined ? !!playerData.foldState[id] : !!defaultOpen;
+  const wrap = el("div","fold" + (isOpen?" open":""));
+  const head = el("div","fold-head");
+  const t = el("div","ft"); t.textContent = title;
+  const arrow = el("div","arrow"); arrow.textContent = "▶";
+  head.appendChild(t); head.appendChild(arrow);
+  head.onclick = ()=>{
+    playerData.foldState[id] = !isOpen;
+    renderUI();
+  };
+  wrap.appendChild(head);
+  const body = el("div","fold-body");
+  if(isOpen) renderBody(body);
+  wrap.appendChild(body);
+  return wrap;
+}
 
 /* ============================================================
- *  平台适配层
+ *  四、存档
  * ============================================================ */
-const SAVE_KEY = "xiuxian_save_v2";
-const SAVE_VERSION = 2;
+const hasAPI = typeof window.H5API !== "undefined" && window.H5API;
 
-function getAPI(){
-  try{
-    return (typeof window.H5API !== "undefined" && window.H5API) ? window.H5API : null;
-  }catch(e){ return null; }
-}
-
-/* 修复：双写兜底 + 不持久化运行时字段 + 离线时间戳 */
-function saveGame(){
+function saveSave(){
   playerData.lastLeaveTime = Date.now();
-  const copy = Object.assign({}, playerData);
-  delete copy._offlineGain;
-  delete copy._offlineSec;
-  const str = JSON.stringify({ v: SAVE_VERSION, d: copy });
+  const str = JSON.stringify(playerData);
+  if(hasAPI){
+    try{ H5API.setStorage(str, function(res){ if(res && res.code!==0) console.warn("存档失败", res); }); }catch(e){}
+  }else{
+    try{ localStorage.setItem("xiuxian_save", str); }catch(e){}
+  }
+}
 
-  try{ localStorage.setItem(SAVE_KEY, str); }catch(e){}
-
-  const api = getAPI();
-  if(api && typeof api.setStorage === "function"){
+function loadSave(cb){
+  const done = ()=>{ afterLoad(); cb && cb(); };
+  if(hasAPI){
     try{
-      api.setStorage(str, function(res){
-        if(res && res.code !== 0) console.warn("云存档失败", res);
-      });
-    }catch(e){ console.warn("云存档异常", e); }
-  }
-}
-
-/* 修复：H5API 回调不触发时用 localStorage 兜底，避免卡死 */
-function loadGame(){
-  return new Promise(function(resolve){
-    let done = false;
-
-    function finish(raw){
-      if(done) return;
-      done = true;
-      if(raw){
-        try{
-          const obj = JSON.parse(raw);
-          const data = (obj && obj.d) ? obj.d : obj;
-          playerData = Object.assign(defaultData(), data);
-        }catch(e){
-          console.warn("存档解析失败，使用默认数据", e);
-          playerData = defaultData();
+      H5API.getStorage(function(res){
+        if(res && res.code===0 && res.data){
+          try{ playerData = Object.assign(defaultData(), JSON.parse(res.data)); }catch(e){ playerData = defaultData(); }
         }
-      }
-      afterLoad();
-      resolve();
-    }
-
-    function fallback(){
-      let raw = null;
-      try{ raw = localStorage.getItem(SAVE_KEY); }catch(e){}
-      finish(raw);
-    }
-
-    const api = getAPI();
-    if(api && typeof api.getStorage === "function"){
-      const timer = setTimeout(fallback, 1500);
-      try{
-        api.getStorage(function(res){
-          clearTimeout(timer);
-          if(res && res.code === 0 && res.data) finish(res.data);
-          else fallback();
-        });
-      }catch(e){
-        clearTimeout(timer);
-        fallback();
-      }
-    }else{
-      fallback();
-    }
-  });
+        done();
+      });
+      return;
+    }catch(e){}
+  }
+  try{
+    const raw = localStorage.getItem("xiuxian_save");
+    if(raw) playerData = Object.assign(defaultData(), JSON.parse(raw));
+  }catch(e){}
+  done();
 }
 
-/* 修复：字段修补 + 越界防御 */
 function afterLoad(){
-  playerData.level = clampNum(playerData.level, 0, levelConfig.length-1, 0);
-  playerData.spirit = Math.max(0, Number(playerData.spirit) || 0);
-  playerData.material = Math.max(0, Number(playerData.material) || 0);
-  playerData.reincCount = clampNum(playerData.reincCount, 0, reincConfig.length-1, 0);
-
   if(!Array.isArray(playerData.skillUnlocked)) playerData.skillUnlocked = [];
-  playerData.skillUnlocked = playerData.skillUnlocked.filter(function(i){
-    return Number.isInteger(i) && i >= 0 && i < skillConfig.length;
-  });
-
-  if(!Array.isArray(playerData.equipLv) || playerData.equipLv.length !== equipConfig.length){
-    playerData.equipLv = equipConfig.map(function(_, i){
-      return clampNum(playerData.equipLv && playerData.equipLv[i], 0, equipConfig[i].maxLv, 0);
-    });
-  }
-  for(let i=0;i<equipConfig.length;i++){
-    playerData.equipLv[i] = clampNum(playerData.equipLv[i], 0, equipConfig[i].maxLv, 0);
-  }
-
-  if(!Array.isArray(playerData.dexCollected)) playerData.dexCollected = [];
-  playerData.dexCollected = Array.from(new Set(playerData.dexCollected)).filter(function(i){
-    return Number.isInteger(i) && i >= 0 && i < dexConfig.length;
-  });
-
+  if(!Array.isArray(playerData.exploreLog)) playerData.exploreLog = [];
+  if(typeof playerData.zoneVisited !== "object" || !playerData.zoneVisited) playerData.zoneVisited = {};
+  if(typeof playerData.stamina !== "number") playerData.stamina = SETTING.maxStamina;
+  playerData.staminaLastTick = Date.now();
+  if(typeof playerData.staminaAcc !== "number") playerData.staminaAcc = 0;
+  if(typeof playerData.autoExplore !== "boolean") playerData.autoExplore = false;
+  if(typeof playerData.autoZone !== "string") playerData.autoZone = "";
+  if(typeof playerData.sectMaterials !== "object" || !playerData.sectMaterials)
+    playerData.sectMaterials = { sword:0, body:0, demon:0, law:0 };
+  if(typeof playerData.sect !== "string") playerData.sect = "";
+  if(typeof playerData.swordOnlineAcc !== "number") playerData.swordOnlineAcc = 0;
+  if(typeof playerData.bodyOnlineAcc !== "number") playerData.bodyOnlineAcc = 0;
+  if(typeof playerData.reincPoints !== "number") playerData.reincPoints = 0;
+  if(typeof playerData.heritage !== "object" || !playerData.heritage)
+    playerData.heritage = { offline:0, secret:0, ad:0, mat:0, pill:0, luck:0 };
+  for(const k of ["offline","secret","ad","mat","pill","luck"])
+    if(typeof playerData.heritage[k] !== "number") playerData.heritage[k] = 0;
+  if(typeof playerData.dregs !== "number") playerData.dregs = 0;
+  if(typeof playerData.luckPoints !== "number") playerData.luckPoints = 0;
+  if(typeof playerData.luckLockedUntil !== "number") playerData.luckLockedUntil = 0;
+  if(typeof playerData.luckAccSec !== "number") playerData.luckAccSec = 0;
+  if(typeof playerData.sweepToday !== "number") playerData.sweepToday = 0;
+  if(typeof playerData.adSweepToday !== "number") playerData.adSweepToday = 0;
+  if(typeof playerData.guild !== "string") playerData.guild = "";
+  if(typeof playerData.guildContrib !== "number") playerData.guildContrib = 0;
+  if(typeof playerData.guildContribEarned !== "number") playerData.guildContribEarned = 0;
+  if(typeof playerData.guildQuestDone !== "boolean") playerData.guildQuestDone = false;
+  if(!Array.isArray(playerData.constitution)) playerData.constitution = [];
+  if(typeof playerData.totalOnlineSec !== "number") playerData.totalOnlineSec = 0;
+  if(typeof playerData.pillMadeTotal !== "number") playerData.pillMadeTotal = 0;
   if(!Array.isArray(playerData.achCompleted)) playerData.achCompleted = [];
-  if(!Array.isArray(playerData.dailyProgress) || playerData.dailyProgress.length !== dailyTaskConfig.length){
-    playerData.dailyProgress = [0,0,0,0,0];
+  if(!Array.isArray(playerData.achClaimed)) playerData.achClaimed = [];
+  if(playerData.realmVersion !== 2){
+    playerData.level = LEGACY_LEVEL_MAP[playerData.level] ?? 0;
+    playerData.realmVersion = 2;
   }
-  if(!Array.isArray(playerData.dailyClaimed) || playerData.dailyClaimed.length !== dailyTaskConfig.length){
-    playerData.dailyClaimed = [false,false,false,false,false];
-  }
+  if(!playerData.realmPassive || typeof playerData.realmPassive !== "object")
+    playerData.realmPassive = { huashen:false, lianxu:false, heti:false, dacheng:false };
+  for(const k of ["huashen","lianxu","heti","dacheng"])
+    if(typeof playerData.realmPassive[k] !== "boolean") playerData.realmPassive[k] = false;
+  if(typeof playerData.artifactId !== "string") playerData.artifactId = "";
+  if(typeof playerData.artifactLv !== "number") playerData.artifactLv = 0;
+  if(!Array.isArray(playerData.weapons)) playerData.weapons = [];
+  if(!Array.isArray(playerData.droppedArtifacts)) playerData.droppedArtifacts = [];
+  if(!Array.isArray(playerData.inventory)) playerData.inventory = [];
+  if(typeof playerData.loadout !== "object" || !playerData.loadout)
+    playerData.loadout = { weapon:null, armor:null, pendant:null, robe:null };
+  for(const s of ["weapon","armor","pendant","robe"])
+    if(playerData.loadout[s] === undefined) playerData.loadout[s] = null;
+  if(!elementConfig.some(e=>e.id===playerData.element)) playerData.element = "metal";
+  if(typeof playerData.equipUid !== "number") playerData.equipUid = 1;
+  if(typeof playerData.ore !== "object" || !playerData.ore)
+    playerData.ore = {metal:0,wood:0,water:0,fire:0,earth:0};
+  for(const k of ["metal","wood","water","fire","earth"])
+    if(typeof playerData.ore[k] !== "number") playerData.ore[k] = 0;
+  if(!Array.isArray(playerData.battleSkillUnlocked)) playerData.battleSkillUnlocked = [];
+  if(typeof playerData.battleSkill !== "number") playerData.battleSkill = -1;
+  if(typeof playerData.battleSkillLv !== "object" || !playerData.battleSkillLv) playerData.battleSkillLv = {};
+  if(typeof playerData.insight !== "number") playerData.insight = 0;
+  if(typeof playerData.artifactElement !== "string") playerData.artifactElement = "";
+  if(!Array.isArray(playerData.pets)) playerData.pets = [];
+  if(typeof playerData.activePet !== "number") playerData.activePet = -1;
+  if(!Array.isArray(playerData.partners)) playerData.partners = [];
+  if(typeof playerData.partnerUid !== "number") playerData.partnerUid = 1;
+  if(playerData.mentor === undefined) playerData.mentor = null;
+  if(typeof playerData.mentorAskToday !== "number") playerData.mentorAskToday = 0;
+  if(playerData.apprentice === undefined) playerData.apprentice = null;
+  if(!playerData.origin) playerData.origin = rollOrigin();
+  if(typeof playerData.originShown !== "boolean") playerData.originShown = false;
+  if(typeof playerData.foldState !== "object" || !playerData.foldState) playerData.foldState = {};
+  if(typeof playerData.tribWin !== "number") playerData.tribWin = 0;
+  if(typeof playerData.tribFail !== "number") playerData.tribFail = 0;
+  if(typeof playerData.adTribToday !== "number") playerData.adTribToday = 0;
+  if(playerData.eventPending === undefined) playerData.eventPending = null;
+  if(typeof playerData.eventCooldownUntil !== "number") playerData.eventCooldownUntil = 0;
+  if(typeof playerData.eventTodayCount !== "number") playerData.eventTodayCount = 0;
+  if(typeof playerData.eventCheckAcc !== "number") playerData.eventCheckAcc = 0;
+  if(typeof playerData.npcAffinity !== "object" || !playerData.npcAffinity) playerData.npcAffinity = {};
+  if(typeof playerData.npcDailyGifted !== "object" || !playerData.npcDailyGifted) playerData.npcDailyGifted = {};
+  if(typeof playerData.npcLine !== "object" || !playerData.npcLine) playerData.npcLine = {};
+  if(typeof playerData.rootIndex !== "number") playerData.rootIndex = rollOneRoot();
+  if(typeof playerData.equipLv !== "object" || !playerData.equipLv) playerData.equipLv = [0,0,0];
+  if(!Array.isArray(playerData.dexCollected)) playerData.dexCollected = [];
+  if(!Array.isArray(playerData.dailyProgress)) playerData.dailyProgress = [0,0,0,0,0];
+  if(!Array.isArray(playerData.dailyClaimed)) playerData.dailyClaimed = [false,false,false,false,false];
+  if(!Array.isArray(playerData.achClaimed)) playerData.achClaimed = [];
 
-  playerData.rootIndex = clampNum(playerData.rootIndex, 0, rootConfig.length-1, 0);
-  playerData.luckIndex = clampNum(playerData.luckIndex, 0, luckConfig.length-1, 0);
-  playerData.pillIndex = clampNum(playerData.pillIndex, 0, pillConfig.length-1, 0);
-  playerData.secretMaxFloor = clampNum(playerData.secretMaxFloor, 0, secretConfig.length, 0);
-
-  playerData._offlineGain = 0;
-  playerData._offlineSec = 0;
-  playerData.onlineTickLast = Date.now();  // 修复：避免离线后 onlineAcc 暴涨
+  if(playerData.level > MAX_PLAYABLE_LEVEL) playerData.level = MAX_PLAYABLE_LEVEL;
 
   checkDailyReset();
   checkLuck();
   calcOfflineGain();
   checkAchievement();
+  checkConstitution();
 }
 
 /* ============================================================
- *  倍率计算（带缓存，避免每秒重复遍历）
+ *  五、倍率与派生
  * ============================================================ */
-const Mult = {
-  _cache: null,
-  clear(){ this._cache = null; },
-  get(){
-    if(this._cache) return this._cache;
+function getReincTotalRate(){
+  let total = 1.0;
+  for(let i=1;i<=playerData.reincCount;i++) total *= reincConfig[i].rate;
+  return total * constitutionBonus("reinc");
+}
+function realmSwordCap(){ return realmPassiveOn("heti")?15:10; }
+function realmBodyCap(){ return realmPassiveOn("heti")?20:15; }
+function swordStack(){ return Math.min(realmSwordCap(), Math.floor(playerData.swordOnlineAcc/60)); }
+function bodyStack(){ return Math.min(realmBodyCap(), Math.floor(playerData.bodyOnlineAcc/3600)); }
 
-    let reinc = 1.0;
-    for(let i=1;i<=playerData.reincCount;i++) reinc *= reincConfig[i].rate;
-
-    let skill = 1.0;
-    for(let i=0;i<playerData.skillUnlocked.length;i++){
-      skill *= skillConfig[playerData.skillUnlocked[i]].rate;
-    }
-
-    let equip = 1.0;
-    for(let i=0;i<equipConfig.length;i++){
-      const lv = playerData.equipLv[i];
-      if(lv <= 0) continue;
-      const cfg = equipConfig[i];
-      equip *= cfg.base + cfg.step * (lv - 1);
-    }
-
-    let dexItem = 1.0;
-    for(let i=0;i<playerData.dexCollected.length;i++){
-      dexItem *= dexConfig[playerData.dexCollected[i]].rate;
-    }
-    const dexMile = getDexMilestone();
-    const dex = dexItem * dexMile.rate;
-
-    const root = rootConfig[playerData.rootIndex].rate;
-    const luck = luckConfig[playerData.luckIndex].rate;
-    const pill = getPillRate();
-
-    const offline = reinc * root * skill * equip * dex;
-    const online = offline * luck * pill;
-
-    this._cache = {
-      reinc: reinc,
-      root: root,
-      skill: skill,
-      equip: equip,
-      dex: dex,
-      dexTitle: dexMile.title,
-      luck: luck,
-      pill: pill,
-      offline: offline,
-      online: online
-    };
-    return this._cache;
+function sectOnlineRate(){
+  switch(playerData.sect){
+    case "sword": return 1.12 * (1 + swordStack()*0.02);
+    case "body":  return 1.00;
+    case "demon": return 1.00;
+    case "law":   return 1.06;
+    default: return 1.00;
   }
-};
+}
+function sectOfflineRate(){
+  switch(playerData.sect){
+    case "sword": return 1.00;
+    case "body":  return 1.25 * (1 + bodyStack()*0.02);
+    case "demon": return 0.85;
+    case "law":   return 1.06;
+    default: return 1.00;
+  }
+}
+function sectMatRate(){ return playerData.sect==="body"?1.50:1.00; }
+function sectSecretRate(){ return playerData.sect==="demon"?1.50:1.00; }
+function sectSkillBoost(){ return playerData.sect==="law" ? (1 + 0.02*playerData.skillUnlocked.length) : 1.00; }
 
+function heritageRate(id){
+  const cfg = heritageConfig.find(h=>h.id===id);
+  const lv = (playerData.heritage && playerData.heritage[id])||0;
+  return 1 + (cfg?cfg.per:0)*lv;
+}
+function matGlobalRate(){ return sectMatRate() * heritageRate("mat") * guildRate("mat"); }
+function adRewardRate(){ return heritageRate("ad"); }
+function luckCostDiscount(){ return 2*((playerData.heritage&&playerData.heritage.luck)||0); }
+
+function guildCfg(){ return guildConfig.find(g=>g.id===playerData.guild); }
+function guildRate(key){ const g = guildCfg(); return (g && g[key]) || 1.0; }
+function guildLuckRate(){ return guildRate("luck"); }
+function guildDregRate(){ return guildRate("dreg"); }
+function guildRankIndex(){
+  let idx = 0;
+  for(let i=0;i<guildRankConfig.length;i++)
+    if(playerData.guildContribEarned >= guildRankConfig[i].earned) idx = i;
+  return idx;
+}
+function guildRankRate(){ return guildRankConfig[guildRankIndex()].rate; }
+
+function constitutionBonus(key){
+  let r = 1;
+  for(const id of playerData.constitution){
+    const c = constitutionConfig.find(x=>x.id===id);
+    if(c && c[key]) r *= c[key];
+  }
+  return r;
+}
+
+function realmPassiveOn(k){ return !!(playerData.realmPassive && playerData.realmPassive[k]); }
+function realmLuckRate(){ return realmPassiveOn("huashen")?1.20:1.0; }
+function realmDregRate(){ return realmPassiveOn("heti")?1.15:1.0; }
+function realmGlobalRate(){ return realmPassiveOn("dacheng")?1.10:1.0; }
+function realmSecretFloorRate(){ return realmPassiveOn("lianxu")?1.12:1.0; }
+function realmLuckCostCut(){ return realmPassiveOn("lianxu")?0.25:0; }
+function realmSweepBonus(){ return realmPassiveOn("dacheng")?1:0; }
+
+function mentorOnlineMult(){
+  if(!playerData.mentor) return 1;
+  const m = mentorConfig.find(x=>x.id===playerData.mentor.id);
+  if(!m) return 1;
+  const bondBonus = 1 + ((playerData.mentor.bond||0)/100)*0.05;
+  return m.mult * bondBonus;
+}
+
+function getSkillTotalRate(){
+  let r = 1.0;
+  for(const idx of playerData.skillUnlocked) r *= skillConfig[idx].rate;
+  return r * sectSkillBoost() * guildRate("skill") * constitutionBonus("skill");
+}
+function getEquipRate(){
+  let total = 1.0;
+  for(let i=0;i<equipConfig.length;i++){
+    const lv = playerData.equipLv[i]||0;
+    if(lv<=0) continue;
+    const cfg = equipConfig[i];
+    total *= cfg.base + cfg.step*(lv-1);
+  }
+  return total;
+}
+function getArtifactRate(){
+  if(!playerData.artifactId || playerData.artifactLv<=0) return 1.0;
+  const cfg = artifactConfig.find(a=>a.id===playerData.artifactId);
+  if(!cfg) return 1.0;
+  return cfg.base + cfg.step*(playerData.artifactLv-1);
+}
+function getWeaponRate(){
+  let total = 1.0;
+  for(const w of playerData.weapons) total *= w.rate;
+  return total;
+}
+function getDexItemRate(){
+  let total = 1.0;
+  for(const idx of playerData.dexCollected) total *= dexConfig[idx].rate;
+  return total;
+}
 function getDexMilestone(){
   const n = playerData.dexCollected.length;
   let rate = 1.0, title = dexMilestone[0].title;
-  for(let i=0;i<dexMilestone.length;i++){
-    if(n >= dexMilestone[i].count){
-      rate = dexMilestone[i].rate;
-      title = dexMilestone[i].title;
-    }
-  }
-  return { rate: rate, title: title };
+  for(const m of dexMilestone){ if(n>=m.count){ rate=m.rate; title=m.title; } }
+  return {rate, title};
 }
+function getDexTotalRate(){ return getDexItemRate() * getDexMilestone().rate; }
 
 function getPillRate(){
   if(!playerData.pillActive) return 1.0;
-  if(Date.now() > playerData.pillEndTime){
-    playerData.pillActive = false;
-    return 1.0;
-  }
-  return pillConfig[playerData.pillIndex].rate;
+  if(Date.now() > playerData.pillEndTime){ playerData.pillActive = false; return 1.0; }
+  return pillConfig[playerData.pillIndex].rate * heritageRate("pill") * guildRate("pill");
 }
 
 function getSpiritPerSec(){
-  return levelConfig[playerData.level].spiritPerSec * Mult.get().online;
+  const base = levelConfig[playerData.level].spiritPerSec;
+  return base
+    * getReincTotalRate()
+    * rootConfig[playerData.rootIndex].rate
+    * getSkillTotalRate()
+    * getEquipRate()
+    * getArtifactRate()
+    * getWeaponRate()
+    * getDexTotalRate()
+    * sectOnlineRate()
+    * guildRate("online")
+    * guildRankRate()
+    * constitutionBonus("online")
+    * constitutionBonus("all")
+    * realmGlobalRate()
+    * mentorOnlineMult()
+    * originMod("online")
+    * luckConfig[playerData.luckIndex].rate
+    * getPillRate();
+}
+function getOfflineRate(){
+  return getReincTotalRate()
+    * rootConfig[playerData.rootIndex].rate
+    * getSkillTotalRate()
+    * getEquipRate()
+    * getArtifactRate()
+    * getWeaponRate()
+    * getDexTotalRate()
+    * sectOfflineRate()
+    * guildRate("offline")
+    * guildRankRate()
+    * constitutionBonus("offline")
+    * constitutionBonus("all")
+    * realmGlobalRate()
+    * originMod("offline")
+    * heritageRate("offline");
 }
 
-function getOfflineRate(){
-  return Mult.get().offline;
+function getCombatPower(){
+  const base = levelConfig[playerData.level].spiritPerSec * 100;
+  const mult = getReincTotalRate()
+    * rootConfig[playerData.rootIndex].rate
+    * getSkillTotalRate()
+    * getEquipRate()
+    * getArtifactRate()
+    * getWeaponRate()
+    * getDexTotalRate()
+    * sectOnlineRate()
+    * guildRankRate()
+    * constitutionBonus("all")
+    * realmGlobalRate();
+  const st = totalStats();
+  return Math.floor(base * mult + st.atk*10 + st.def*8 + st.hp*2);
 }
 
 /* ============================================================
- *  离线收益
+ *  六、装备 / 功法 / 灵宠 / 属性
  * ============================================================ */
-/* 修复：每次重新计算前清零，防止重复翻倍 */
-function calcOfflineGain(){
-  playerData._offlineGain = 0;
-  playerData._offlineSec = 0;
+function rollQuality(power){
+  const w = [45, 30, 16, 7, 2].map((x,i)=> x * Math.pow(0.75+power, i));
+  const sum = w.reduce((a,b)=>a+b,0);
+  let r = Math.random()*sum;
+  for(let i=0;i<w.length;i++){ r-=w[i]; if(r<=0) return i; }
+  return 0;
+}
+function genEquip(slotId, power){
+  const q = rollQuality(power);
+  const elx = elementConfig[Math.floor(Math.random()*elementConfig.length)].id;
+  const lv = playerData.level;
+  const m = qualityConfig[q].mult;
+  let atk=0, def=0, hp=0;
+  const slot = equipSlots.find(s=>s.id===slotId);
+  if(slot.main==="atk")      atk = Math.floor((8+lv*3)*m);
+  else if(slot.main==="def") def = Math.floor((5+lv*2)*m);
+  else if(slot.main==="hp")  hp  = Math.floor((30+lv*10)*m);
+  else { atk=Math.floor((3+lv*1)*m); def=Math.floor((3+lv*1)*m); hp=Math.floor((12+lv*4)*m); }
+  const pool = equipNamePool[slotId];
+  const name = pool[Math.floor(Math.random()*pool.length)];
+  return { uid: playerData.equipUid++, slot:slotId, name, quality:q, element:elx, atk, def, hp, levelReq:lv };
+}
+function equippedList(){ return equipSlots.map(s=>playerData.loadout[s.id]).filter(Boolean); }
+function skillLevel(i){ return playerData.battleSkillLv[i]||1; }
+function battleSkillBonus(){
+  const i = playerData.battleSkill;
+  if(i<0 || !playerData.battleSkillUnlocked.includes(i)) return {atk:0, def:0, hp:0, rate:1};
+  const c = battleSkillConfig[i];
+  const lv = skillLevel(i);
+  const mult = 1 + 0.1*(lv-1);
+  return {
+    atk: Math.round(c.atk*mult), def: Math.round(c.def*mult),
+    hp: Math.round(c.hp*mult), rate: c.rate + 0.01*(lv-1)
+  };
+}
+function petBonus(){
+  if(playerData.activePet<0 || !playerData.pets.includes(playerData.activePet)) return {atk:0, def:0, hp:0};
+  const p = petConfig[playerData.activePet];
+  return {atk:p.atk, def:p.def, hp:p.hp};
+}
+function totalStats(){
+  const b = { atk:20+playerData.level*15, def:10+playerData.level*8, hp:100+playerData.level*60 };
+  const bs = battleSkillBonus();
+  const pb = petBonus();
+  const ob = originBonus();
+  let a=0,d=0,h=0;
+  for(const e of equippedList()){ a+=e.atk; d+=e.def; h+=e.hp; }
+  return { atk:b.atk+a+bs.atk+pb.atk+ob.atk, def:b.def+d+bs.def+pb.def+ob.def, hp:b.hp+h+bs.hp+pb.hp+ob.hp };
+}
+function charElement(){
+  const count = {metal:0,wood:0,water:0,fire:0,earth:0};
+  for(const e of equippedList()) count[e.element]++;
+  let best = playerData.element, bestN = 0;
+  for(const k in count){ if(count[k]>bestN){ best=k; bestN=count[k]; } }
+  return best;
+}
+function elementBonus(attacker, defender){
+  if(elementKe[attacker]===defender) return 1.20;
+  if(elementKe[defender]===attacker) return 0.85;
+  return 1.0;
+}
+function equipStatText(e){
+  const p = [];
+  if(e.atk) p.push(`攻 ${e.atk}`);
+  if(e.def) p.push(`防 ${e.def}`);
+  if(e.hp)  p.push(`血 ${e.hp}`);
+  return p.join(" · ") || "无属性";
+}
+function gainInsight(n, why){
+  if(n<=0) return;
+  playerData.insight += n;
+  if(why) toast(`感悟 +${n}（${why}）`);
+}
+function artifactMatCost(lv){ return Math.floor(500*Math.pow(1.85, lv)); }
+function artifactDregCost(lv){ return Math.floor(30*Math.pow(1.6, lv)); }
+function artifactLuckCost(lv){ return lv>=6 ? Math.floor(10*lv) : 0; }
+function artifactOreCost(lv){ return lv>=4 ? (lv-2) : 0; }
 
-  const last = Number(playerData.lastLeaveTime) || 0;
-  if(last <= 0){
-    playerData.lastLeaveTime = Date.now();
-    return;
-  }
+/* ============================================================
+ *  七、随机 / 气运 / 离线
+ * ============================================================ */
+function rollWeighted(config, key){
+  key = key || "weight";
+  let total = 0;
+  for(const c of config) total += c[key];
+  let r = Math.random()*total, sum = 0;
+  for(let i=0;i<config.length;i++){ sum += config[i][key]; if(r<=sum) return i; }
+  return 0;
+}
+function rollOneRoot(){ return rollWeighted(rootConfig,"weight"); }
+function rollAdRoot(){ return rollWeighted(rootConfig,"adWeight"); }
 
+function checkLuck(){
   const now = Date.now();
-  const deltaSec = Math.max(0, (now - last) / 1000);
-  const realSec = Math.min(deltaSec, SETTING.maxOfflineHour * 3600);
-
-  // 不足 10 秒不弹窗，直接结算
-  const gain = levelConfig[playerData.level].spiritPerSec * getOfflineRate() * realSec;
-  if(gain > 0) playerData.spirit += gain;
-
-  if(realSec >= 10){
-    playerData._offlineGain = gain;
-    playerData._offlineSec = realSec;
+  if(playerData.luckLockedUntil > now) return;
+  if(playerData.luckEndTime <= now){
+    playerData.luckIndex = rollWeighted(luckConfig);
+    playerData.luckEndTime = now + 30*60*1000;
   }
+}
+function drawLuckCost(){ return Math.max(1, Math.floor((SETTING.luckDrawCost - luckCostDiscount()) * (1 - realmLuckCostCut()))); }
+function lockLuckCost(){ return Math.max(1, Math.floor((SETTING.luckLockCost - luckCostDiscount()) * (1 - realmLuckCostCut()))); }
+
+function calcOfflineGain(){
+  if(playerData.lastLeaveTime <= 0){ playerData.lastLeaveTime = Date.now(); return; }
+  const now = Date.now();
+  const deltaSec = Math.max(0, (now - playerData.lastLeaveTime)/1000);
+  const realSec = Math.min(deltaSec, SETTING.maxOfflineHour*3600);
+  if(realSec <= 0) return;
+  const gain = levelConfig[playerData.level].spiritPerSec * getOfflineRate() * realSec;
+  playerData.spirit += gain;
+  playerData._offlineGain = gain;
   playerData.lastLeaveTime = now;
 }
 
 /* ============================================================
- *  随机与气运
+ *  八、日常 / 在线计时 / 成就 / 体质
  * ============================================================ */
-function rollWeighted(config){
-  let total = 0;
-  for(let i=0;i<config.length;i++) total += config[i].weight;
-  let r = Math.random() * total;
-  for(let i=0;i<config.length;i++){
-    r -= config[i].weight;
-    if(r <= 0) return i;
+function checkDailyReset(){
+  const today = new Date().getDate();
+  if(playerData.dailyResetDay !== today){
+    playerData.dailyResetDay = today;
+    playerData.dailyProgress = [0,0,0,0,0];
+    playerData.dailyClaimed = [false,false,false,false,false];
+    playerData.onlineAcc = 0;
+    playerData.npcDailyGifted = {};
+    playerData.adStaminaToday = 0;
+    playerData.sweepToday = 0;
+    playerData.adSweepToday = 0;
+    playerData.guildQuestDone = false;
+    playerData.eventTodayCount = 0;
+    playerData.adTribToday = 0;
+    playerData.mentorAskToday = 0;
+    playerData.adSpeedToday = 0;
+    playerData.adSecretToday = 0;
+    playerData.secretTodayCount = SETTING.secretFreeCount;
+  }
+}
+function tickOnlineTime(){
+  const now = Date.now();
+  const delta = Math.floor((now - playerData.onlineTickLast)/1000);
+  playerData.onlineTickLast = now;
+  if(delta<=0) return;
+  playerData.onlineAcc += delta;
+  playerData.totalOnlineSec += delta;
+  if(playerData.dailyProgress[0] < dailyTaskConfig[0].target)
+    playerData.dailyProgress[0] = Math.min(playerData.onlineAcc, dailyTaskConfig[0].target);
+  if(playerData.sect==="sword") playerData.swordOnlineAcc += delta;
+  if(playerData.sect==="body") playerData.bodyOnlineAcc += delta;
+  playerData.luckAccSec += delta;
+  const per = SETTING.luckPerOnlineSec;
+  while(playerData.luckAccSec >= per){
+    playerData.luckAccSec -= per;
+    playerData.luckPoints += 1;
+  }
+  apprenticeFeedback();
+}
+
+function checkAchievement(){
+  for(const cfg of achievementConfig){
+    if(playerData.achCompleted.includes(cfg.id)) continue;
+    let ok = false;
+    switch(cfg.type){
+      case "cultivate":
+        if(cfg.id===0 && playerData.level>=1) ok=true;
+        if(cfg.id===1 && playerData.level>=5) ok=true;
+        if(cfg.id===2 && playerData.level>=9) ok=true;
+        if(cfg.id===3 && playerData.level>=13) ok=true;
+        if(cfg.id===12 && playerData.level>=29) ok=true;
+        break;
+      case "secret":
+        if(cfg.id===4 && playerData.secretMaxFloor>=3) ok=true;
+        if(cfg.id===5 && playerData.secretMaxFloor>=7) ok=true;
+        if(cfg.id===6 && playerData.secretMaxFloor>=10) ok=true;
+        break;
+      case "reinc":
+        if(cfg.id===7 && playerData.reincCount>=1) ok=true;
+        if(cfg.id===8 && playerData.reincCount>=3) ok=true;
+        break;
+      case "collect":
+        if(cfg.id===9 && playerData.washRootTotal>=5) ok=true;
+        if(cfg.id===10 && playerData.skillUnlocked.length>=8) ok=true;
+        if(cfg.id===11 && (playerData.equipLv[0]>=5||playerData.equipLv[1]>=5||playerData.equipLv[2]>=5)) ok=true;
+        if(cfg.id===13 && !!playerData.artifactId) ok=true;
+        break;
+      case "trib":
+        if(cfg.id===14 && playerData.tribWin>=3) ok=true;
+        break;
+    }
+    if(ok) playerData.achCompleted.push(cfg.id);
+  }
+}
+
+function constitutionUnlocked(c){ return playerData.constitution.includes(c.id); }
+function constitutionProgress(c){
+  switch(c.cond.type){
+    case "secret":    return Math.min(playerData.secretMaxFloor, c.cond.target);
+    case "onlineSec": return Math.min(playerData.totalOnlineSec, c.cond.target);
+    case "washRoot":  return Math.min(playerData.washRootTotal, c.cond.target);
+    case "makePill":  return Math.min(playerData.pillMadeTotal, c.cond.target);
+    case "reinc":     return Math.min(playerData.reincCount, c.cond.target);
+    case "guild":     return playerData.guild ? 1 : 0;
   }
   return 0;
 }
+function checkConstitution(){
+  for(const c of constitutionConfig){
+    if(constitutionUnlocked(c)) continue;
+    if(constitutionProgress(c) >= c.cond.target){
+      playerData.constitution.push(c.id);
+      toast(`解锁特殊体质【${c.name}】！`);
+    }
+  }
+}
 
-function rollOneRoot(){ return rollWeighted(rootConfig); }
+/* ============================================================
+ *  九、宗门 / 伙伴 / 师徒 / NPC
+ * ============================================================ */
+function joinGuild(id){
+  if(playerData.guild){ toast("已加入宗门，不可更换"); return; }
+  if(playerData.level < 1){ toast("抵达炼气一层后方可加入宗门"); return; }
+  const g = guildConfig.find(x=>x.id===id);
+  playerData.guild = id;
+  checkConstitution();
+  saveSave(); renderUI();
+  toast(`加入【${g.name}】！宗门委托已开启`);
+}
+function guildQuestHook(type){
+  const g = guildCfg();
+  if(!g || playerData.guildQuestDone) return;
+  if(g.quest !== type) return;
+  playerData.guildQuestDone = true;
+  const before = guildRankIndex();
+  playerData.guildContrib += GUILD_CONTRIB_REWARD;
+  playerData.guildContribEarned += GUILD_CONTRIB_REWARD;
+  const after = guildRankIndex();
+  if(after > before) toast(`宗门委托完成！贡献 +${GUILD_CONTRIB_REWARD}，晋升【${guildRankConfig[after].name}】！`);
+  else toast(`宗门委托完成！贡献 +${GUILD_CONTRIB_REWARD}`);
+}
+function buyGuildShop(id){
+  const cfg = guildShopConfig.find(x=>x.id===id);
+  if(!cfg) return;
+  if(playerData.guildContrib < cfg.cost){ toast("宗门贡献不足"); return; }
+  playerData.guildContrib -= cfg.cost;
+  for(const k in cfg.give) playerData[k] += cfg.give[k];
+  saveSave(); renderUI();
+  toast(`兑换成功：${cfg.desc}`);
+}
 
-function checkLuck(){
+/* ===== 伙伴 ===== */
+function partnerRel(p){
+  if(p.relation==="道侣") return "道侣";
+  if(p.favor <= -60) return "仇人";
+  if(p.favor >= 80) return "挚友";
+  if(p.favor < 0)    return "不和";
+  return "道友";
+}
+function partnerRelColor(r){
+  return {道友:"var(--muted)", 不和:"var(--orange)", 挚友:"var(--green)", 仇人:"#e06c6c", 道侣:"#f08bb4"}[r] || "var(--muted)";
+}
+function clampFav(v){ return Math.max(PARTNER_FAV_MIN, Math.min(PARTNER_FAV_MAX, Math.round(v))); }
+function getPartner(uid){ return playerData.partners.find(p=>p.uid===uid); }
+
+function meetPartner(){
+  const owned = new Set(playerData.partners.map(p=>p.name));
+  const pool = partnerNamePool.filter(n=>!owned.has(n.name));
+  if(!pool.length) return null;
+  const t = pool[Math.floor(Math.random()*pool.length)];
+  const p = {uid:playerData.partnerUid++, name:t.name, icon:t.icon, sect:t.sect, note:t.note, favor:10, relation:"道友"};
+  playerData.partners.push(p);
+  return p;
+}
+function adjustFav(uid, delta){
+  const p = getPartner(uid); if(!p) return;
+  p.favor = clampFav(p.favor + delta);
+  if(p.relation !== "道侣"){
+    if(p.favor <= -60) p.relation = "仇人";
+    else if(p.favor >= 80) p.relation = "挚友";
+    else if(p.favor < 0) p.relation = "不和";
+    else p.relation = "道友";
+  }
+}
+function giftPartner(uid){
+  const p = getPartner(uid); if(!p) return;
+  if(playerData.material < 50){ toast("仙材不足，无法赠礼"); return; }
+  playerData.material -= 50;
+  adjustFav(uid, p.favor<0 ? 4 : 8);
+  saveSave(); renderUI();
+  toast(`赠予【${p.name}】一份仙材，好感 ${p.favor}`);
+}
+function discussPartner(uid){
+  const p = getPartner(uid); if(!p) return;
+  const cost = Math.floor(getSpiritPerSec()*30);
+  if(playerData.spirit < cost){ toast("灵力不足，论道未成"); return; }
+  playerData.spirit -= cost;
+  adjustFav(uid, 5);
+  saveSave(); renderUI();
+  toast(`与【${p.name}】论道一场，好感 ${p.favor}`);
+}
+function tradePartner(uid){
+  const p = getPartner(uid); if(!p) return;
+  const rel = partnerRel(p);
+  if(rel === "仇人"){ toast("对方与你已成仇人，不愿往来"); return; }
+  if(p.favor >= 40){
+    const mt = eventMaterialReward(1);
+    playerData.material += mt;
+    toast(`【${p.name}】念你交好，赠予仙材 ${mt}`);
+  }else if(p.favor >= 0){
+    if(playerData.material < 80){ toast("仙材不足，交易未成"); return; }
+    playerData.material -= 80;
+    const sp = eventSpiritReward(120);
+    playerData.spirit += sp;
+    toast(`互通有无：仙材 -80，灵力 +${fmt(sp)}`);
+  }else{
+    const loss = Math.floor(playerData.spirit*0.05);
+    playerData.spirit -= loss;
+    adjustFav(uid, -2);
+    toast(`对方借机压价，灵力 -${fmt(loss)}，关系更僵`);
+  }
+  saveSave(); renderUI();
+}
+function makeFriend(uid){
+  const p = getPartner(uid); if(!p) return;
+  if(p.favor < 80){ toast("好感需达 80 方可结为挚友"); return; }
+  p.relation = "挚友";
+  saveSave(); renderUI();
+  toast(`你与【${p.name}】结为挚友`);
+}
+function makeEnemy(uid){
+  const p = getPartner(uid); if(!p) return;
+  adjustFav(uid, -30);
+  p.relation = "仇人";
+  saveSave(); renderUI();
+  toast(`你与【${p.name}】反目成仇`);
+}
+function makeDaoLu(uid){
+  const p = getPartner(uid); if(!p) return;
+  if(p.favor < 80){ toast("好感需达 80 方可结为道侣"); return; }
+  playerData.partners.forEach(q=>{ if(q.relation==="道侣") q.relation = "挚友"; });
+  p.relation = "道侣";
+  saveSave(); renderUI();
+  toast(`你与【${p.name}】结为道侣，携手同行`);
+}
+
+/* ===== 师徒 ===== */
+function appointMentor(){
+  if(playerData.mentor) return "已有师门";
+  const m = mentorConfig[Math.floor(Math.random()*mentorConfig.length)];
+  playerData.mentor = { id:m.id, bond:20 };
+  return m;
+}
+function askMentor(){
+  if(!playerData.mentor){ toast("尚未拜师"); return; }
+  if(playerData.mentorAskToday >= 1){ toast("今日已请教过了"); return; }
+  const m = mentorConfig.find(x=>x.id===playerData.mentor.id);
+  if(!m) return;
+  playerData.mentorAskToday++;
+  playerData.mentor.bond = Math.min(100, (playerData.mentor.bond||0) + 5);
+  if(m.ask === "spirit"){
+    const sp = Math.floor(getSpiritPerSec()*300);
+    playerData.spirit += sp;
+    toast(`请教道法，灵力 +${fmt(sp)}`);
+  }else if(m.ask === "material"){
+    const mt = Math.floor(300*matGlobalRate());
+    playerData.material += mt;
+    toast(`请教器道，仙材 +${mt}`);
+  }else{
+    const d = 20;
+    playerData.dregs += d;
+    toast(`请教丹道，丹渣 +${d}`);
+  }
+  saveSave(); renderUI();
+}
+const apprenticeNamePool = ["小禾","阿石","青枫","灵素","若尘","阿蛮","萧然","云青"];
+function takeApprentice(){
+  if(playerData.apprentice) return null;
+  const name = apprenticeNamePool[Math.floor(Math.random()*apprenticeNamePool.length)];
+  const a = { uid:playerData.partnerUid++, name, icon:"🌱", note:"新入门的少年修士",
+              loyalty:50, lastBack:Date.now() };
+  playerData.apprentice = a;
+  return a;
+}
+function apprenticeFeedback(){
+  const a = playerData.apprentice;
+  if(!a) return;
   const now = Date.now();
-  if(playerData.luckEndTime <= now){
-    playerData.luckIndex = rollWeighted(luckConfig);
-    playerData.luckEndTime = now + 30 * 60 * 1000;
-    Mult.clear();
-  }
+  if(!a.lastBack) a.lastBack = now;
+  if(now - a.lastBack < 5*60*1000) return;
+  a.lastBack = now;
+  a.loyalty = Math.min(100, a.loyalty + 1);
+  const sp = Math.floor(getSpiritPerSec()*60*(a.loyalty/100)*2);
+  playerData.spirit += sp;
+  addExploreLog(`弟子【${a.name}】回馈灵力 +${fmt(sp)}`);
 }
 
-/* ============================================================
- *  每日重置
- * ============================================================ */
-/* 修复：补全秘境/广告次数重置，改用完整日期，定时器里也会调用 */
-function resetDaily(){
-  playerData.dailyResetDay = todayKey();
-  playerData.dailyProgress = [0,0,0,0,0];
-  playerData.dailyClaimed = [false,false,false,false,false];
-  playerData.onlineAcc = 0;
-  playerData.secretTodayCount = SETTING.secretFreeCount;
-  playerData.adSpeedToday = 0;
-  playerData.adSecretToday = 0;
+/* ===== NPC ===== */
+function npcAff(id){ return playerData.npcAffinity[id]||0; }
+function npcRankOf(id){
+  const aff = npcAff(id);
+  let rank = npcRank[0];
+  for(const r of npcRank){ if(aff >= r.need) rank = r; }
+  return rank;
 }
-
-function checkDailyReset(){
-  if(playerData.dailyResetDay !== todayKey()) resetDaily();
-}
-
-/* 修复：限制单次 delta，防止离线后 onlineAcc 暴涨 */
-function tickOnlineTime(now){
-  const delta = Math.min(Math.max(0, (now - playerData.onlineTickLast) / 1000), 60);
-  playerData.onlineTickLast = now;
-  if(delta <= 0) return;
-
-  playerData.onlineAcc += delta;
-  const target = dailyTaskConfig[0].target;
-  if(playerData.dailyProgress[0] < target){
-    playerData.dailyProgress[0] = Math.min(playerData.onlineAcc, target);
-  }
-}
-
-/* ============================================================
- *  成就
- * ============================================================ */
-function checkAchievement(){
-  const newly = [];
-  for(let i=0;i<achievementConfig.length;i++){
-    const cfg = achievementConfig[i];
-    if(playerData.achCompleted.indexOf(cfg.id) >= 0) continue;
-
-    let ok = false;
-    switch(cfg.id){
-      case 0: ok = playerData.level >= 1; break;
-      case 1: ok = playerData.level >= 4; break;
-      case 2: ok = playerData.level >= 7; break;
-      case 3: ok = playerData.level >= 10; break;
-      case 4: ok = playerData.secretMaxFloor >= 3; break;
-      case 5: ok = playerData.secretMaxFloor >= 7; break;
-      case 6: ok = playerData.secretMaxFloor >= 10; break;
-      case 7: ok = playerData.reincCount >= 1; break;
-      case 8: ok = playerData.reincCount >= 3; break;
-      case 9: ok = playerData.washRootTotal >= 5; break;
-      case 10: ok = playerData.skillUnlocked.length >= 8; break;
-      case 11:
-        ok = playerData.equipLv[0] >= 5 || playerData.equipLv[1] >= 5 || playerData.equipLv[2] >= 5;
-        break;
-    }
-    if(ok){
-      playerData.achCompleted.push(cfg.id);
-      newly.push(cfg.name);
-    }
-  }
-  if(newly.length){
-    toast("成就达成：" + newly.join("、"));
-  }
-}
-
-/* ============================================================
- *  广告封装
- * ============================================================ */
-const Ad = {
-  running: false,
-  show(onReward){
-    if(this.running){ toast("广告正在播放，请稍候"); return; }
-    this.running = true;
-
-    const self = this;
-    function done(ok){
-      self.running = false;
-      if(ok) onReward();
-    }
-
-    const api = getAPI();
-    if(api && typeof api.callPlayAd === "function" && typeof api.playRewardAd === "function"){
-      try{
-        api.callPlayAd(function(data){
-          if(!data || !data.canPlayAd){
-            done(false);
-            toast("暂无广告，请稍后再试");
-            return;
-          }
-          api.playRewardAd(function(res){
-            if(res && res.code === 0) done(true);
-            else { done(false); toast("未看完广告，无法获得奖励"); }
-          });
-        });
-      }catch(e){
-        console.warn("广告调用异常", e);
-        done(false);
-        toast("广告加载失败");
-      }
-    }else{
-      // 本地预览：模拟广告
-      console.log("[Ad] 本地模拟广告");
-      setTimeout(function(){ done(true); }, 300);
-    }
-  }
-};
-
-/* ============================================================
- *  通用弹窗
- * ============================================================ */
-function modal(opts){
-  return new Promise(function(resolve){
-    const mask = el("div","mask");
-    mask.innerHTML =
-      '<div class="modal">' +
-        '<div class="modal-title">' + (opts.title || "提示") + '</div>' +
-        '<div class="modal-body">' + (opts.html || "") + '</div>' +
-        '<div class="modal-actions">' +
-          (opts.showCancel === false ? "" : '<button class="btn" data-act="cancel">' + (opts.cancelText || "取消") + '</button>') +
-          '<button class="btn gold" data-act="ok">' + (opts.okText || "确定") + '</button>' +
-        '</div>' +
-      '</div>';
-
-    document.body.appendChild(mask);
-
-    mask.addEventListener("click", function(e){
-      const act = e.target.dataset ? e.target.dataset.act : null;
-      if(act === "ok" || act === "cancel"){
-        mask.remove();
-        resolve(act === "ok");
-      }
-    });
+function npcQuestHook(tab){
+  npcConfig.forEach(n=>{
+    if(n.questTab === tab) playerData.npcAffinity[n.id] = npcAff(n.id) + 1;
   });
 }
-
-/* 轻提示：复用节点，避免频繁创建 */
-let toastTimer = null;
-function toast(msg){
-  let t = document.getElementById("toast");
-  if(!t){
-    t = el("div","toast");
-    t.id = "toast";
-    document.body.appendChild(t);
+function npcTalk(id){
+  const n = npcConfig.find(x=>x.id===id); if(!n) return;
+  const idx = Math.floor(Math.random()*n.lines.length);
+  playerData.npcLine[id] = idx;
+  renderUI();
+}
+function giftNpc(id){
+  const n = npcConfig.find(x=>x.id===id); if(!n) return;
+  if(playerData.npcDailyGifted[id]){ toast("今日已领过这位道友的赠礼"); return; }
+  playerData.npcDailyGifted[id] = true;
+  const rank = npcRankOf(id);
+  if(n.giftType === "spirit"){
+    const sp = Math.floor(getSpiritPerSec()*n.giftBase*rank.mult);
+    playerData.spirit += sp;
+    toast(`【${n.name}】赠你灵力 ${fmt(sp)}`);
+  }else if(n.giftType === "material"){
+    const mt = Math.floor(n.giftBase*(1+playerData.level*0.5)*rank.mult*matGlobalRate());
+    playerData.material += mt;
+    toast(`【${n.name}】赠你仙材 ${mt}`);
+  }else{
+    // 风险交易
+    if(Math.random() < 0.6){
+      const mt = Math.floor(200*(1+playerData.level*0.6)*matGlobalRate());
+      const dg = 20;
+      playerData.material += mt; playerData.dregs += dg;
+      toast(`赌赢了！仙材 +${mt}，丹渣 +${dg}`);
+      adjustNpc(id, 2);
+    }else{
+      const loss = Math.floor(playerData.spirit*0.08);
+      playerData.spirit -= loss;
+      toast(`赌输了，灵力 -${fmt(loss)}`);
+      adjustNpc(id, 1);
+    }
   }
-  t.textContent = msg;
-  t.style.display = "block";
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ t.style.display = "none"; }, 2200);
+  adjustNpc(id, 1);
+  saveSave(); renderUI();
+}
+function adjustNpc(id, n){ playerData.npcAffinity[id] = Math.max(0, npcAff(id) + n); }
+
+/* ============================================================
+ *  十、广告封装
+ * ============================================================ */
+function showRewardAd(onReward){
+  if(hasAPI && H5API.callPlayAd && H5API.playRewardAd){
+    H5API.callPlayAd(function(data){
+      if(!data || !data.canPlayAd){ toast("暂无广告，请稍后再试"); return; }
+      H5API.playRewardAd(function(res){
+        if(res && res.code===0) onReward();
+        else toast("未看完广告，无法获得奖励");
+      });
+    });
+  }else{
+    toast("（本地预览）模拟广告奖励");
+    setTimeout(onReward, 120);
+  }
 }
 
 /* ============================================================
- *  功能动作
+ *  十一、境界与天劫
  * ============================================================ */
+let pendingTrib = null;
+function tribSuccessRate(){
+  const order = [13,17,21,25,29].indexOf(playerData.level+1);
+  let rate = SETTING.tribBaseRate - SETTING.tribRateDrop*Math.max(0,order);
+  rate += (luckConfig[playerData.luckIndex].rate - 1) * 0.5;
+  rate += (playerData.artifactLv||0) * 0.005;
+  rate += (constitutionBonus("all") - 1) * 0.5;
+  return Math.min(0.95, Math.max(0.20, rate));
+}
 function levelUp(){
-  if(playerData.level >= levelConfig.length - 1){ toast("已达当前版本最高境界"); return; }
-  const cost = levelConfig[playerData.level].cost;
-  if(playerData.spirit < cost){ toast("灵力不足"); return; }
-
-  playerData.spirit -= cost;
+  if(playerData.level >= MAX_PLAYABLE_LEVEL){ toast("已达当前版本顶点，渡劫境开发中"); return; }
+  const cfg = levelConfig[playerData.level];
+  const nextCfg = levelConfig[playerData.level+1];
+  if(nextCfg.locked){ toast("天劫未至，渡劫境暂未开放"); return; }
+  if(playerData.spirit < cfg.cost){ toast("灵力不足"); return; }
+  const req = nextCfg.req;
+  if(req){
+    if(playerData.reincCount < req.reinc){ toast(`需累计转生 ${req.reinc} 次`); return; }
+    if(playerData.secretMaxFloor < req.secret){ toast(`需通关秘境 ${req.secret} 层`); return; }
+    if(playerData.material < req.material){ toast(`仙材不足（需 ${fmt(req.material)}）`); return; }
+    if(playerData.dregs < req.dregs){ toast(`丹渣不足（需 ${req.dregs}）`); return; }
+    if(req.luck && playerData.luckPoints < req.luck){ toast(`气运值不足（需 ${req.luck}）`); return; }
+  }
+  if(nextCfg.trib){ pendingTrib = { fromLevel: playerData.level }; openTribModal(); return; }
+  applyBreakthrough(playerData.level, req, false, 0);
+}
+function applyBreakthrough(fromLevel, req, tribSuccess, reward){
+  const cfg = levelConfig[fromLevel];
+  playerData.spirit -= cfg.cost;
+  if(req){
+    playerData.material -= req.material;
+    playerData.dregs -= req.dregs;
+    if(req.luck) playerData.luckPoints -= req.luck;
+    if(req.passive) playerData.realmPassive[req.passive] = true;
+  }
   playerData.level++;
+  if(tribSuccess) playerData.spirit += reward;
+  gainInsight(req ? 10 : 2, req ? "大境界突破" : "境界突破");
   checkAchievement();
-  Mult.clear();
-  saveGame();
-  renderAll();
-  toast("突破成功：" + levelConfig[playerData.level].name);
+  checkConstitution();
+  saveSave(); renderUI();
+  const passiveMsg = req && req.passive ? "，觉醒境界道果！" : "";
+  if(tribSuccess) toast(`渡劫成功：${levelConfig[playerData.level].name}${passiveMsg}，渡劫奖励灵力 +${fmt(reward)}`);
+  else toast(`突破成功：${levelConfig[playerData.level].name}${passiveMsg}`);
+  if(fromLevel===0 && playerData.level===1) setTimeout(showSectIntro, 500);
+  if(fromLevel===4 && playerData.level===5 && !playerData.sect) setTimeout(openSectSelect, 500);
+}
+function resolveTribulation(guarded){
+  if(!pendingTrib) return;
+  const fromLevel = pendingTrib.fromLevel;
+  const nextCfg = levelConfig[fromLevel+1];
+  const req = nextCfg.req;
+  const success = guarded || Math.random() < tribSuccessRate();
+  closeTribModal();
+  if(success){
+    playerData.tribWin++;
+    const reward = Math.floor(getSpiritPerSec()*SETTING.tribRewardSec*2);
+    applyBreakthrough(fromLevel, req, true, reward);
+  }else{
+    const loss = Math.floor(playerData.spirit*SETTING.tribFailLoss);
+    playerData.spirit -= loss;
+    playerData.tribFail++;
+    saveSave(); renderUI();
+    toast(`渡劫失败！天雷重创，灵力 -${fmt(loss)}（前置资源未损）`);
+  }
+  pendingTrib = null;
+}
+function adGuardTrib(){
+  if(playerData.adTribToday >= SETTING.adTribLimit){ toast("今日护持次数已用完"); return; }
+  showRewardAd(()=>{ playerData.adTribToday++; resolveTribulation(true); });
+}
+function closeTribModal(){
+  const m = document.getElementById("tribModal");
+  if(m) m.remove();
+}
+function openTribModal(){
+  closeTribModal();
+  if(!pendingTrib) return;
+  const fromLevel = pendingTrib.fromLevel;
+  const nextCfg = levelConfig[fromLevel+1];
+  const rate = tribSuccessRate();
+  const reward = Math.floor(getSpiritPerSec()*SETTING.tribRewardSec*2);
+  const left = SETTING.adTribLimit - playerData.adTribToday;
+  const mask = el("div","modal-mask"); mask.id = "tribModal";
+  const box = el("div","modal");
+  box.innerHTML = `<h3 style="color:#ff6b6b">⚡ 天劫降临 · ${nextCfg.name}</h3>
+    <div class="modal-desc">
+      大境界突破须受天雷洗礼。<br>
+      渡劫成功率：<b style="color:var(--gold)">${(rate*100).toFixed(1)}%</b>（气运、本命法宝、体质可提升）<br>
+      渡劫成功：突破境界，并获渡劫奖励，灵力 +${fmt(reward)}<br>
+      渡劫失败：损失当前灵力 ${Math.round(SETTING.tribFailLoss*100)}%，前置资源不损<br>
+      历劫战绩：成功 ${playerData.tribWin} 次 · 失败 ${playerData.tribFail} 次
+    </div>`;
+  const acts = el("div","modal-actions");
+  const laterBtn = el("button","btn"); laterBtn.textContent = "暂缓";
+  laterBtn.onclick = ()=>{ closeTribModal(); pendingTrib = null; };
+  const guardBtn = el("button","btn gold");
+  guardBtn.textContent = left>0 ? `广告护持 · 必成（${left}/${SETTING.adTribLimit}）` : "今日护持已用完";
+  guardBtn.disabled = left<=0;
+  guardBtn.onclick = adGuardTrib;
+  const fightBtn = el("button","btn"); fightBtn.textContent = "强行渡劫";
+  fightBtn.onclick = ()=>resolveTribulation(false);
+  acts.appendChild(laterBtn); acts.appendChild(guardBtn); acts.appendChild(fightBtn);
+  box.appendChild(acts);
+  mask.appendChild(box);
+  document.body.appendChild(mask);
 }
 
+/* ============================================================
+ *  十二、体系选择弹窗
+ * ============================================================ */
+const SECT_MAT_NEED = 3;
+function sectMaterialCount(id){ return playerData.sectMaterials[id]||0; }
+function closeSectModal(){
+  const m = document.getElementById("sectModal");
+  if(m) m.remove();
+}
+function openSectModal(mode){
+  closeSectModal();
+  const mask = el("div","modal-mask"); mask.id = "sectModal";
+  const box = el("div","modal");
+  const title = mode==="intro" ? "修炼路径指引" : "选择修炼体系";
+  const desc = mode==="intro"
+    ? "前路有四条体系可循：剑修、体修、魔修、法修。各体系信物散落于自由探险地图，集齐对应信物，方可在突破筑基境时拜入该道途。"
+    : "筑基已成，道途当定。持有信物者可拜入对应体系；暂无信物者可继续探险寻觅，稍后再来选择。";
+  box.innerHTML = `<h3>${title}</h3><div class="modal-desc">${desc}</div>`;
+  const list = el("div");
+  sectConfig.forEach(s=>{
+    const count = sectMaterialCount(s.id);
+    const canChoose = mode==="select" && count>=SECT_MAT_NEED && !playerData.sect;
+    const opt = el("div","sect-opt" + (canChoose?"":" locked"));
+    opt.innerHTML = `
+      <div class="sect-icon" style="color:${s.color}">${s.icon}</div>
+      <div class="sect-info">
+        <div class="sect-name">${s.name}</div>
+        <div class="sect-desc">${s.desc}</div>
+        <div class="sect-mat">信物【${s.matName}】× ${count}/${SECT_MAT_NEED}</div>
+      </div>`;
+    if(mode==="select"){
+      const btn = el("button","btn" + (canChoose?" gold":""));
+      btn.textContent = canChoose ? "拜入此道" : "信物不足";
+      btn.disabled = !canChoose;
+      btn.onclick = ()=>chooseSect(s.id);
+      opt.appendChild(btn);
+    }
+    list.appendChild(opt);
+  });
+  box.appendChild(list);
+  const acts = el("div","modal-actions");
+  const closeBtn = el("button","btn"); closeBtn.textContent = "稍后";
+  closeBtn.onclick = closeSectModal;
+  acts.appendChild(closeBtn);
+  box.appendChild(acts);
+  mask.appendChild(box);
+  document.body.appendChild(mask);
+}
+function showSectIntro(){ openSectModal("intro"); }
+function openSectSelect(){ openSectModal("select"); }
+function chooseSect(id){
+  const cfg = sectConfig.find(s=>s.id===id);
+  if(!cfg || sectMaterialCount(id) < SECT_MAT_NEED){ toast(`信物不足（需 ${SECT_MAT_NEED} 个）`); return; }
+  if(playerData.sect){ toast("已入道途，不可更改"); return; }
+  playerData.sectMaterials[id] -= SECT_MAT_NEED;
+  playerData.sect = id;
+  closeSectModal();
+  saveSave(); renderUI();
+  toast(`已拜入【${cfg.name}】！道途已定`);
+}
+
+/* ============================================================
+ *  十三、各类功能动作
+ * ============================================================ */
+/* 广告加速 */
 function adSpeedUp(){
   if(playerData.adSpeedToday >= SETTING.adSpeedDailyLimit){ toast("今日加速次数已用完"); return; }
-  Ad.show(function(){
-    const bonus = getSpiritPerSec() * SETTING.adSpeedHour * 3600;
+  showRewardAd(()=>{
+    const bonus = Math.floor(getSpiritPerSec() * SETTING.adSpeedHour*3600 * adRewardRate());
     playerData.spirit += bonus;
     playerData.adSpeedToday++;
-    saveGame();
-    renderAll();
-    toast("获得 " + fmt(bonus) + " 灵力加速");
+    saveSave(); renderUI();
+    toast(`获得 ${fmt(bonus)} 灵力加速`);
   });
 }
 
+/* 秘境 */
+function secretRewardAt(floor){
+  if(floor < secretConfig.length) return secretConfig[floor].reward;
+  const over = floor - secretConfig.length;
+  const cycle = Math.floor(over/8);
+  const pos = over%8;
+  return Math.floor(secretConfig[secretConfig.length-1].reward * Math.pow(8, cycle) * (1 + pos*0.3));
+}
 function challengeSecret(){
   const next = playerData.secretMaxFloor;
-  if(next >= secretConfig.length){ toast("秘境已全部通关"); return; }
-
-  // 次数不足时走广告补充
   if(playerData.secretTodayCount <= 0){
-    if(playerData.adSecretToday >= SETTING.adSecretDailyLimit){
-      toast("今日秘境次数已用完");
-      return;
-    }
-    Ad.show(function(){
+    if(playerData.adSecretToday >= SETTING.adSecretDailyLimit){ toast("今日秘境次数已用完"); return; }
+    showRewardAd(()=>{
       playerData.adSecretToday++;
       playerData.secretTodayCount++;
-      saveGame();
-      renderAll();
+      saveSave(); renderUI();
       toast("秘境次数 +1");
     });
     return;
   }
-
   playerData.secretTodayCount--;
-  playerData.secretDoubleUsed = false;  // 新通关允许翻倍
-
-  const reward = secretConfig[next].reward;
+  const floorReward = Math.floor(getSpiritPerSec()*60*realmSecretFloorRate());
+  const baseReward = Math.floor(secretRewardAt(next) * sectSecretRate() * heritageRate("secret"));
+  let reward = Math.max(baseReward, floorReward);
+  let backlash = false;
+  if(playerData.sect==="demon" && Math.random()<0.15){
+    reward = Math.max(floorReward, Math.floor(reward*0.7));
+    backlash = true;
+  }
   playerData.spirit += reward;
-
-  const matGain = 80 + next * 40;
+  let matGain = Math.floor((80 + next*40) * matGlobalRate());
   playerData.material += matGain;
 
-  // 图鉴掉落
-  let gotNewDex = false;
-  const dexIdx = dexConfig.findIndex(function(d){ return d.floor === next; });
-  if(dexIdx >= 0 && playerData.dexCollected.indexOf(dexIdx) < 0){
-    playerData.dexCollected.push(dexIdx);
-    gotNewDex = true;
-  }
-
-  // 修复：图鉴寻宝加持真正生效
-  if(!gotNewDex && playerData.dexGuarantee){
-    const missing = [];
-    for(let i=0;i<dexConfig.length;i++){
-      if(playerData.dexCollected.indexOf(i) < 0) missing.push(i);
+  const dexIdx = dexConfig.findIndex(d=>d.floor===next);
+  let repeatMat = 0, newDex = "";
+  if(dexIdx>=0){
+    if(!playerData.dexCollected.includes(dexIdx)){
+      playerData.dexCollected.push(dexIdx);
+      playerData.dexGuarantee = false;
+      newDex = `、新图鉴【${dexConfig[dexIdx].name}】`;
+    }else{
+      repeatMat = Math.floor(matGain*0.5);
+      playerData.material += repeatMat;
     }
-    if(missing.length){
-      const pick = missing[Math.floor(Math.random() * missing.length)];
-      playerData.dexCollected.push(pick);
-      gotNewDex = true;
-      toast("寻宝加持：获得图鉴【" + dexConfig[pick].name + "】");
-    }
-    playerData.dexGuarantee = false;
   }
-
-  playerData.secretMaxFloor = next + 1;
-  playerData.dailyProgress[1] = Math.min(
-    playerData.dailyProgress[1] + 1,
-    dailyTaskConfig[1].target
-  );
-
+  playerData.luckPoints += Math.floor(SETTING.luckPerSecret * guildLuckRate() * realmLuckRate());
+  let equipMsg = "";
+  if(Math.random() < 0.35){
+    const slot = equipSlots[Math.floor(Math.random()*equipSlots.length)].id;
+    const eq = genEquip(slot, Math.min(1, next/32));
+    playerData.inventory.push(eq);
+    equipMsg = `、拾得${qualityConfig[eq.quality].name}【${eq.name}】`;
+  }
+  const backMsg = backlash ? "　心魔反噬，灵力折损三成" : "";
+  const repMsg = repeatMat>0 ? `　重复图鉴折算仙材 +${repeatMat}` : "";
+  toast(`通关秘境${next+1}层！灵力 ${fmt(reward)}、仙材 ${matGain}${newDex}${repMsg}${equipMsg}${backMsg}`);
+  playerData.secretMaxFloor = next+1;
+  playerData.dailyProgress[1] = Math.min(playerData.dailyProgress[1]+1, dailyTaskConfig[1].target);
+  npcQuestHook("秘境");
+  guildQuestHook("secret");
   checkAchievement();
-  Mult.clear();
-  saveGame();
-  renderAll();
-
-  if(gotNewDex){
-    toast("通关秘境" + (next+1) + "层！灵力 " + fmt(reward) +
-          "、仙材 " + matGain + "、获得新图鉴");
-  }else{
-    toast("通关秘境" + (next+1) + "层！灵力 " + fmt(reward) + "、仙材 " + matGain);
-  }
+  checkConstitution();
+  saveSave(); renderUI();
 }
-
-/* 修复：每次通关只允许翻倍一次 */
+function sweepSecret(){
+  const freeLimit = SETTING.sweepFreeCount + realmSweepBonus();
+  const canFree = playerData.sweepToday < freeLimit;
+  const canAd = !canFree && playerData.adSweepToday < SETTING.adSweepLimit;
+  if(!canFree && !canAd){ toast("今日扫荡次数已用完"); return; }
+  const doSweep = (useAd)=>{
+    const floor = Math.max(0, playerData.secretMaxFloor);
+    const spiritGain = Math.floor(secretRewardAt(Math.max(0,floor-1))*0.15 * heritageRate("secret"));
+    const matGain = Math.floor((60 + floor*30) * matGlobalRate());
+    playerData.spirit += spiritGain;
+    playerData.material += matGain;
+    if(useAd) playerData.adSweepToday++; else playerData.sweepToday++;
+    playerData.luckPoints += Math.ceil(SETTING.luckPerSecret/2);
+    saveSave(); renderUI();
+    toast(`扫荡完成：灵力 ${fmt(spiritGain)}、仙材 ${matGain}`);
+  };
+  if(canFree) doSweep(false);
+  else showRewardAd(()=>doSweep(true));
+}
 function adDoubleSecretMat(){
-  if(playerData.secretMaxFloor <= 0){ toast("尚未通关秘境"); return; }
-  if(playerData.secretDoubleUsed){ toast("本次通关已翻倍"); return; }
-
-  Ad.show(function(){
-    const floor = playerData.secretMaxFloor - 1;
-    const gain = 80 + floor * 40;
-    playerData.material += gain;
-    playerData.secretDoubleUsed = true;
-    saveGame();
-    renderAll();
-    toast("仙材翻倍 +" + gain);
+  showRewardAd(()=>{
+    const matGain = Math.floor((80 + Math.max(0,playerData.secretMaxFloor-1)*40) * matGlobalRate() * adRewardRate());
+    playerData.material += matGain;
+    saveSave(); renderUI();
+    toast(`仙材翻倍 +${matGain}`);
   });
 }
 
-/* 修复：改为自定义弹窗，移动端更稳 */
-function washRoot(){
-  Ad.show(function(){
-    const newIdx = rollOneRoot();
-    const oldRoot = rootConfig[playerData.rootIndex];
-    const newRoot = rootConfig[newIdx];
-
-    playerData.washRootTotal++;
-    playerData.dailyProgress[2] = Math.min(
-      playerData.dailyProgress[2] + 1,
-      dailyTaskConfig[2].target
-    );
-
-    modal({
-      title: "洗练结果",
-      html:
-        '旧：<span style="color:' + oldRoot.color + '">' + oldRoot.name + '</span>' +
-        ' ×' + oldRoot.rate.toFixed(2) + '<br>' +
-        '新：<span style="color:' + newRoot.color + '">' + newRoot.name + '</span>' +
-        ' ×' + newRoot.rate.toFixed(2),
-      okText: "替换",
-      cancelText: "保留原灵根"
-    }).then(function(replace){
-      if(replace) playerData.rootIndex = newIdx;
-      checkAchievement();
-      Mult.clear();
-      saveGame();
-      renderAll();
-      toast(replace ? "灵根已替换" : "保留原灵根");
-    });
-  });
-}
-
-function doReincarnate(){
-  if(playerData.level !== levelConfig.length - 1){ toast("修为不足，无法踏入轮回"); return; }
-  if(playerData.reincCount >= reincConfig.length - 1){ toast("已达当前轮回上限"); return; }
-
-  modal({
-    title: "踏入轮回",
-    html: "将重置修为、灵力、秘境进度，获得永久灵力增幅。<br>确定转生？",
-    okText: "确定转生"
-  }).then(function(ok){
-    if(!ok) return;
-
-    playerData.reincCount++;
-    playerData.level = 0;
-    playerData.spirit = 0;
-    playerData.secretMaxFloor = 0;
-    playerData.secretTodayCount = SETTING.secretFreeCount;
-    playerData.secretDoubleUsed = false;
-    playerData.reincGotGift = false;
-    playerData.pillActive = false;
-
-    checkAchievement();
-    Mult.clear();
-    saveGame();
-    renderAll();
-
-    modal({
-      title: "轮回成功",
-      html:
-        "当前：" + reincConfig[playerData.reincCount].name + "<br>" +
-        "灵力总倍率 ×" + Mult.get().reinc.toFixed(2),
-      showCancel: false
-    });
-  });
-}
-
-function getReincGift(){
-  if(playerData.reincGotGift){ toast("本次转生礼包已领取"); return; }
-  Ad.show(function(){
-    const gift = getSpiritPerSec() * SETTING.maxOfflineHour * 3600;
-    playerData.spirit += gift;
-    playerData.reincGotGift = true;
-    saveGame();
-    renderAll();
-    toast("领取启灵灵力 " + fmt(gift));
-  });
-}
-
-/* 修复：灵力不足半价时不浪费广告 */
-function unlockSkill(skillIdx){
-  if(playerData.skillUnlocked.indexOf(skillIdx) >= 0){ toast("已解锁"); return; }
-
-  const cfg = skillConfig[skillIdx];
-  const half = Math.floor(cfg.cost * 0.5);
-
-  function grant(){
-    playerData.skillUnlocked.push(skillIdx);
-    playerData.dailyProgress[4] = Math.min(
-      playerData.dailyProgress[4] + 1,
-      dailyTaskConfig[4].target
-    );
-    checkAchievement();
-    Mult.clear();
-    saveGame();
-    renderAll();
-  }
-
-  if(playerData.spirit >= cfg.cost){
-    playerData.spirit -= cfg.cost;
-    grant();
-    toast("解锁【" + cfg.name + "】");
-    return;
-  }
-  if(playerData.spirit < half){
-    toast("灵力不足，至少需要 " + fmt(half));
-    return;
-  }
-
-  Ad.show(function(){
-    if(playerData.spirit < half){ toast("灵力不足"); return; }
-    playerData.spirit -= half;
-    grant();
-    toast("广告助力，半价解锁【" + cfg.name + "】");
-  });
-}
-
-function refreshLuckByAd(){
-  Ad.show(function(){
-    playerData.luckIndex = rollWeighted(luckConfig);
-    playerData.luckEndTime = Date.now() + 30 * 60 * 1000;
-    Mult.clear();
-    saveGame();
-    renderAll();
-    toast("气运：" + luckConfig[playerData.luckIndex].name);
-  });
-}
-
-function makePill(pillIdx){
-  const cfg = pillConfig[pillIdx];
-  if(playerData.material < cfg.cost){ toast("仙材不足"); return; }
-
-  const wasActive = playerData.pillActive && Date.now() < playerData.pillEndTime;
-  playerData.material -= cfg.cost;
-  playerData.pillActive = true;
-  playerData.pillIndex = pillIdx;
-  playerData.pillEndTime = Date.now() + cfg.duration;
-  playerData.dailyProgress[3] = Math.min(
-    playerData.dailyProgress[3] + 1,
-    dailyTaskConfig[3].target
-  );
-
-  Mult.clear();
-  saveGame();
-  renderAll();
-  toast((wasActive ? "已替换为：" : "炼制成功：") + cfg.name);
-}
-
-function adExtendPill(){
-  if(!playerData.pillActive || Date.now() > playerData.pillEndTime){
-    toast("当前无丹药效果");
-    return;
-  }
-  Ad.show(function(){
-    const remain = playerData.pillEndTime - Date.now();
-    if(remain <= 0){ toast("丹药已失效"); return; }
-    playerData.pillEndTime += remain * 0.5;
-    saveGame();
-    renderAll();
-    toast("丹药时长延长 50%");
-  });
-}
-
-/* 修复：统一费用公式，避免显示与实际不一致 */
-function equipCost(lv){
-  return Math.floor(200 * Math.pow(1.8, lv));
-}
-
-function upgradeEquip(idx){
-  const cfg = equipConfig[idx];
-  const lv = playerData.equipLv[idx];
-  if(lv >= cfg.maxLv){ toast("已达最大等级"); return; }
-
-  const cost = equipCost(lv);
-  if(playerData.material < cost){ toast("仙材不足"); return; }
-
-  playerData.material -= cost;
-  playerData.equipLv[idx]++;
+/* 灵根洗练 */
+function rootMatCost(){ return Math.floor(80 * Math.pow(1.18, playerData.washRootTotal)); }
+function applyWashRoot(newIdx){
+  const old = rootConfig[playerData.rootIndex];
+  const nw = rootConfig[newIdx];
+  playerData.washRootTotal++;
+  playerData.dailyProgress[2] = Math.min(playerData.dailyProgress[2]+1, dailyTaskConfig[2].target);
+  const replace = confirm(`洗练结果：\n旧：${old.name} ×${old.rate.toFixed(2)}\n新：${nw.name} ×${nw.rate.toFixed(2)}\n是否替换？`);
+  if(replace) playerData.rootIndex = newIdx;
   checkAchievement();
-  Mult.clear();
-  saveGame();
-  renderAll();
-  toast(cfg.name + " 升至 " + playerData.equipLv[idx] + " 级");
+  checkConstitution();
+  saveSave(); renderUI();
+}
+function washRootByMaterial(){
+  const cost = rootMatCost();
+  if(playerData.material < cost){ toast("仙材不足，无法洗练"); return; }
+  playerData.material -= cost;
+  applyWashRoot(rollOneRoot());
+}
+function washRootByAd(){
+  showRewardAd(()=>{ applyWashRoot(rollAdRoot()); });
 }
 
-function adDexGuarantee(){
-  if(playerData.dexCollected.length >= dexConfig.length){ toast("图鉴已全部收录"); return; }
-  if(playerData.dexGuarantee){ toast("加持已在生效"); return; }
-
-  Ad.show(function(){
-    playerData.dexGuarantee = true;
-    saveGame();
-    renderAll();
-    toast("寻宝加持：下次通关若无新图鉴，将随机补录一个");
-  });
+/* 丹药 */
+function makePill(i){
+  const p = pillConfig[i];
+  if(!p) return;
+  if(playerData.spirit < p.cost){ toast("灵力不足"); return; }
+  playerData.spirit -= p.cost;
+  playerData.pillActive = true;
+  playerData.pillIndex = i;
+  playerData.pillEndTime = Date.now() + p.duration;
+  playerData.pillMadeTotal++;
+  playerData.dailyProgress[3] = Math.min(playerData.dailyProgress[3]+1, dailyTaskConfig[3].target);
+  guildQuestHook("makePill");
+  checkConstitution();
+  saveSave(); renderUI();
+  toast(`炼制成功【${p.name}】，修为倍率 ×${p.rate}`);
 }
 
-function claimAch(achId, useAd){
-  if(playerData.achCompleted.indexOf(achId) < 0){ toast("成就尚未完成"); return; }
-  if(playerData.achCompleted.indexOf(achId + "_claimed") >= 0){ toast("已领取"); return; }
+/* 修炼功法 */
+function unlockSkill(i){
+  if(playerData.skillUnlocked.includes(i)) return;
+  const c = skillConfig[i];
+  if(playerData.spirit < c.cost){ toast("灵力不足"); return; }
+  playerData.spirit -= c.cost;
+  playerData.skillUnlocked.push(i);
+  playerData.dailyProgress[4] = Math.min(playerData.dailyProgress[4]+1, dailyTaskConfig[4].target);
+  checkAchievement();
+  saveSave(); renderUI();
+  toast(`习得【${c.name}】`);
+}
 
-  const cfg = achievementConfig.find(function(x){ return x.id === achId; });
+/* 气运 */
+function drawLuck(){
+  const cost = drawLuckCost();
+  if(playerData.luckPoints < cost){ toast(`气运值不足（需 ${cost}）`); return; }
+  playerData.luckPoints -= cost;
+  playerData.luckIndex = rollWeighted(luckConfig);
+  playerData.luckEndTime = Date.now() + 30*60*1000;
+  guildQuestHook("luck");
+  saveSave(); renderUI();
+  toast(`抽取气运：${luckConfig[playerData.luckIndex].name}`);
+}
+function lockLuck(){
+  const cost = lockLuckCost();
+  if(playerData.luckPoints < cost){ toast(`气运值不足（需 ${cost}）`); return; }
+  playerData.luckPoints -= cost;
+  playerData.luckLockedUntil = Date.now() + SETTING.luckLockMin*60*1000;
+  saveSave(); renderUI();
+  toast(`气运已锁定 ${SETTING.luckLockMin} 分钟`);
+}
+
+/* 转生与传承 */
+function dropCurrentArtifact(){
+  if(!playerData.artifactId) return;
+  const cfg = artifactConfig.find(a=>a.id===playerData.artifactId);
+  if(cfg && playerData.artifactLv >= ARTIFACT_YUANYING_LV){
+    const zone = exploreConfig[Math.floor(Math.random()*exploreConfig.length)];
+    playerData.droppedArtifacts.push({
+      aid:cfg.id, name:cfg.name, icon:cfg.icon, color:cfg.color,
+      lv:playerData.artifactLv, zone:zone.id
+    });
+  }
+  playerData.artifactId = "";
+  playerData.artifactLv = 0;
+}
+function doReincarnate(){
+  if(playerData.level < MAX_PLAYABLE_LEVEL){ toast("修为不足，无法踏入轮回"); return; }
+  if(playerData.reincCount >= reincConfig.length-1){ toast("已达当前轮回上限"); return; }
+  if(!confirm("踏入轮回将重置修为、灵力、秘境进度、四种信物与本轮本命法宝；修炼体系可重新选择。温养至元婴阶的本命法宝会脱落留于地图；传承点、传承线、功法、体质永久保留。确定转生？")) return;
+  playerData.reincCount++;
+  playerData.reincPoints += 2;
+  playerData.level = 0;
+  playerData.spirit = 0;
+  playerData.secretMaxFloor = 0;
+  playerData.secretTodayCount = SETTING.secretFreeCount;
+  playerData.reincGotGift = false;
+  playerData.swordOnlineAcc = 0;
+  playerData.sect = "";
+  playerData.sectMaterials = { sword:0, body:0, demon:0, law:0 };
+  playerData.luckLockedUntil = 0;
+  dropCurrentArtifact();
+  playerData.weapons = [];
+  playerData.inventory = [];
+  playerData.loadout = { weapon:null, armor:null, pendant:null, robe:null };
+  playerData.ore = { metal:0, wood:0, water:0, fire:0, earth:0 };
+  playerData.battleSkillUnlocked = [];
+  playerData.battleSkill = -1;
+  playerData.battleSkillLv = {};
+  playerData.insight = 0;
+  playerData.pets = [];
+  playerData.activePet = -1;
+  playerData.partners = [];
+  playerData.partnerUid = 1;
+  playerData.mentor = null;
+  playerData.mentorAskToday = 0;
+  playerData.apprentice = null;
+  playerData.autoExplore = false;
+  playerData.autoZone = "";
+  playerData.origin = rollOrigin();
+  playerData.artifactElement = "";
+  checkAchievement();
+  checkConstitution();
+  saveSave(); renderUI();
+  const og = playerData.origin;
+  alert(`轮回成功！当前：${reincConfig[playerData.reincCount].name}，灵力总倍率 ×${getReincTotalRate().toFixed(2)}\n此世出身：${og.icon} ${og.name}（${og.desc}）\n获得传承点 +2。`);
+}
+function buyHeritage(id){
+  const cfg = heritageConfig.find(h=>h.id===id);
+  const lv = playerData.heritage[id]||0;
+  if(lv >= cfg.maxLv){ toast("该传承线已满级"); return; }
+  const cost = lv+1;
+  if(playerData.reincPoints < cost){ toast(`传承点不足（需 ${cost} 点）`); return; }
+  playerData.reincPoints -= cost;
+  playerData.heritage[id] = lv+1;
+  saveSave(); renderUI();
+  toast(`【${cfg.name}】升至 ${playerData.heritage[id]} 级`);
+}
+
+/* 战斗功法 */
+function unlockBattleSkill(i){
+  if(playerData.battleSkillUnlocked.includes(i)){ toast("已习得"); return; }
+  const cfg = battleSkillConfig[i];
+  if(playerData.spirit < cfg.cost){ toast("灵力不足"); return; }
+  playerData.spirit -= cfg.cost;
+  playerData.battleSkillUnlocked.push(i);
+  playerData.battleSkill = i;
+  saveSave(); renderUI();
+  toast(`习得战斗功法【${cfg.name}】`);
+}
+function equipBattleSkill(i){
+  if(!playerData.battleSkillUnlocked.includes(i)){ toast("尚未习得"); return; }
+  playerData.battleSkill = i;
+  saveSave(); renderUI();
+  toast(`已装备【${battleSkillConfig[i].name}】`);
+}
+function upgradeBattleSkill(i){
+  if(!playerData.battleSkillUnlocked.includes(i)){ toast("尚未习得"); return; }
+  const lv = skillLevel(i);
+  if(lv >= BATTLE_SKILL_MAX_LV){ toast("功法已至圆满重数"); return; }
+  const cost = skillUpgradeCost(lv);
+  if(playerData.insight < cost){ toast(`感悟不足（需 ${cost} 点）`); return; }
+  playerData.insight -= cost;
+  playerData.battleSkillLv[i] = lv+1;
+  saveSave(); renderUI();
+  toast(`【${battleSkillConfig[i].name}】参悟至第 ${lv+1} 重`);
+}
+function writeBattleSkill(i){
+  if(playerData.battleSkillUnlocked.includes(i)){ toast("已习得"); return; }
+  const cfg = battleSkillConfig[i];
+  if(playerData.insight < cfg.insightCost){ toast(`感悟不足（需 ${cfg.insightCost} 点）`); return; }
+  playerData.insight -= cfg.insightCost;
+  playerData.battleSkillUnlocked.push(i);
+  playerData.battleSkill = i;
+  saveSave(); renderUI();
+  toast(`以感悟撰成【${cfg.name}】`);
+}
+
+/* 灵宠 */
+function recruitPet(i){
+  if(playerData.pets.includes(i)){ toast("已结缘"); return; }
+  const p = petConfig[i];
+  if(playerData.spirit < p.cost){ toast("灵力不足"); return; }
+  playerData.spirit -= p.cost;
+  playerData.pets.push(i);
+  if(playerData.activePet < 0) playerData.activePet = i;
+  saveSave(); renderUI();
+  toast(`结缘灵宠【${p.icon}${p.name}】`);
+}
+function setActivePet(i){
+  if(!playerData.pets.includes(i)){ toast("尚未结缘"); return; }
+  playerData.activePet = (playerData.activePet===i) ? -1 : i;
+  saveSave(); renderUI();
+  toast(playerData.activePet<0 ? "灵宠已收回" : `【${petConfig[i].icon}${petConfig[i].name}】出战`);
+}
+
+/* 装备操作 */
+function equipItem(uid){
+  const idx = playerData.inventory.findIndex(e=>e.uid===uid);
+  if(idx < 0) return;
+  const item = playerData.inventory[idx];
+  const old = playerData.loadout[item.slot];
+  playerData.loadout[item.slot] = item;
+  playerData.inventory.splice(idx,1);
+  if(old) playerData.inventory.push(old);
+  saveSave(); renderUI();
+  toast(`已穿戴【${item.name}】`);
+}
+function unequipItem(slotId){
+  const old = playerData.loadout[slotId];
+  if(!old) return;
+  playerData.loadout[slotId] = null;
+  playerData.inventory.push(old);
+  saveSave(); renderUI();
+}
+function sellItem(uid){
+  const idx = playerData.inventory.findIndex(e=>e.uid===uid);
+  if(idx < 0) return;
+  const it = playerData.inventory[idx];
+  const mat = Math.floor((20+it.atk+it.def+it.hp) * qualityConfig[it.quality].mult);
+  playerData.material += mat;
+  playerData.inventory.splice(idx,1);
+  saveSave(); renderUI();
+  toast(`出售【${it.name}】，仙材 +${mat}`);
+}
+
+/* 本命法宝 */
+function forgeArtifact(id){
+  const cfg = artifactConfig.find(a=>a.id===id);
   if(!cfg) return;
-
-  function grant(mult){
-    playerData.spirit += cfg.rewardSpirit * mult;
-    playerData.material += cfg.rewardMat * mult;
-    playerData.achCompleted.push(achId + "_claimed");
-    saveGame();
-    renderAll();
-    toast("领取成功：灵力+" + fmt(cfg.rewardSpirit * mult) +
-          "，仙材+" + (cfg.rewardMat * mult));
-  }
-
-  if(useAd) Ad.show(function(){ grant(2); });
-  else grant(1);
+  if(playerData.artifactId){ toast("已铸就本命法宝"); return; }
+  if(playerData.level < cfg.unlockLevel){ toast("需筑基期方可铸就本命法宝"); return; }
+  const matCost = 2000, dregCost = 50;
+  if(playerData.material < matCost){ toast(`仙材不足（需 ${matCost}）`); return; }
+  if(playerData.dregs < dregCost){ toast(`丹渣不足（需 ${dregCost}）`); return; }
+  playerData.material -= matCost;
+  playerData.dregs -= dregCost;
+  playerData.artifactId = id;
+  playerData.artifactLv = 1;
+  playerData.artifactElement = cfg.element;
+  checkAchievement();
+  saveSave(); renderUI();
+  toast(`本命法宝【${cfg.name}】铸就！`);
 }
-
-function claimDaily(taskId, useAd){
-  if(playerData.dailyClaimed[taskId]){ toast("今日已领取"); return; }
-  const cfg = dailyTaskConfig[taskId];
-  if(playerData.dailyProgress[taskId] < cfg.target){ toast("任务尚未完成"); return; }
-
-  function grant(mult){
-    playerData.spirit += cfg.rewardSpirit * mult;
-    playerData.material += cfg.rewardMat * mult;
-    playerData.dailyClaimed[taskId] = true;
-    saveGame();
-    renderAll();
-    toast("领取成功：灵力+" + fmt(cfg.rewardSpirit * mult) +
-          "，仙材+" + (cfg.rewardMat * mult));
-  }
-
-  if(useAd) Ad.show(function(){ grant(2); });
-  else grant(1);
+function upgradeArtifact(){
+  if(!playerData.artifactId){ toast("尚无本命法宝"); return; }
+  const cfg = artifactConfig.find(a=>a.id===playerData.artifactId);
+  if(!cfg) return;
+  const lv = playerData.artifactLv;
+  if(lv >= cfg.maxLv){ toast("已至最高阶"); return; }
+  const mat = artifactMatCost(lv), dreg = artifactDregCost(lv), luck = artifactLuckCost(lv);
+  const oreN = artifactOreCost(lv);
+  const elx = playerData.artifactElement || cfg.element;
+  if(playerData.material < mat){ toast(`仙材不足（需 ${fmt(mat)}）`); return; }
+  if(playerData.dregs < dreg){ toast(`丹渣不足（需 ${dreg}）`); return; }
+  if(luck && playerData.luckPoints < luck){ toast(`气运值不足（需 ${luck}）`); return; }
+  if(oreN > 0 && (playerData.ore[elx]||0) < oreN){ toast(`需【${oreConfig[elx].name}】×${oreN}`); return; }
+  playerData.material -= mat;
+  playerData.dregs -= dreg;
+  if(luck) playerData.luckPoints -= luck;
+  if(oreN > 0) playerData.ore[elx] -= oreN;
+  playerData.artifactLv++;
+  saveSave(); renderUI();
+  toast(`本命法宝温养至第 ${playerData.artifactLv} 阶`);
 }
-
-function adDoubleOffline(){
-  if(!playerData._offlineGain || playerData._offlineGain <= 0){
-    toast("本次无离线收益可翻倍");
-    return;
-  }
-  Ad.show(function(){
-    playerData.spirit += playerData._offlineGain;
-    toast("离线收益翻倍 +" + fmt(playerData._offlineGain));
-    playerData._offlineGain = 0;
-    playerData._offlineSec = 0;
-    saveGame();
-    renderAll();
-  });
-}
-
-async function resetGame(){
-  const ok = await modal({
-    title: "重置游戏",
-    html: "将清空所有进度（包括转生、图鉴、成就），确定？",
-    okText: "确定重置"
-  });
-  if(!ok) return;
-
-  playerData = defaultData();
-  playerData.dailyResetDay = todayKey();
-  playerData.onlineTickLast = Date.now();
-  Mult.clear();
-  saveGame();
-  renderAll();
-  toast("已重置");
+function pickupDroppedArtifact(idx){
+  const d = playerData.droppedArtifacts[idx];
+  if(!d) return;
+  if(playerData.artifactId){ toast("已有本命法宝，无法再承一件"); return; }
+  playerData.droppedArtifacts.splice(idx,1);
+  playerData.artifactId = d.aid;
+  playerData.artifactLv = d.lv;
+  const cfg = artifactConfig.find(a=>a.id===d.aid);
+  playerData.artifactElement = cfg ? cfg.element : "metal";
+  saveSave(); renderUI();
+  toast(`拾回前世本命【${d.name}】，阶位保留至 ${d.lv} 阶`);
 }
 
 /* ============================================================
- *  UI 渲染
+ *  十四、探险系统
  * ============================================================ */
-const TABS = ["修行","秘境","灵根","功法","炼丹","炼器","图鉴","成就","日常","轮回"];
-let currentTab = "修行";
-
-function row(name, desc, btnHtml){
-  const r = el("div","row");
-  const info = el("div","info");
-  info.innerHTML = '<div class="name">' + name + '</div>' +
-                   (desc ? '<div class="desc">' + desc + '</div>' : "");
-  r.appendChild(info);
-  if(btnHtml) r.insertAdjacentHTML("beforeend", btnHtml);
-  return r;
+function addExploreLog(msg){
+  playerData.exploreLog.unshift(msg);
+  if(playerData.exploreLog.length > 8) playerData.exploreLog.length = 8;
 }
-
-/* Header 每秒更新，不重建 DOM */
-function updateHeader(){
-  const m = Mult.get();
-  const per = levelConfig[playerData.level].spiritPerSec * m.online;
-
-  document.getElementById("spirit").textContent = fmt(playerData.spirit);
-  document.getElementById("perSec").textContent = fmt(per) + "/秒";
-  document.getElementById("levelName").textContent = levelConfig[playerData.level].name;
-  document.getElementById("material").textContent = fmt(playerData.material);
-
-  const luck = luckConfig[playerData.luckIndex];
-  document.getElementById("buffLuck").textContent =
-    luck.name + " ×" + luck.rate.toFixed(2) +
-    "（" + fmtTime(playerData.luckEndTime - Date.now()) + "）";
-
-  const pillEl = document.getElementById("buffPill");
-  if(playerData.pillActive && Date.now() < playerData.pillEndTime){
-    const pill = pillConfig[playerData.pillIndex];
-    pillEl.style.display = "";
-    pillEl.textContent = pill.name + " ×" + pill.rate.toFixed(2) +
-      "（" + fmtTime(playerData.pillEndTime - Date.now()) + "）";
+function eventSpiritReward(sec){ return Math.floor(getSpiritPerSec()*sec); }
+function eventMaterialReward(mult){
+  return Math.floor((30+playerData.level*20) * (mult||1) * matGlobalRate());
+}
+function regenStamina(){
+  const now = Date.now();
+  const elapsed = Math.floor((now - playerData.staminaLastTick)/1000);
+  if(elapsed <= 0) return;
+  playerData.staminaLastTick = now;
+  if(playerData.stamina >= SETTING.maxStamina) return;
+  playerData.staminaAcc = (playerData.staminaAcc||0) + elapsed;
+  while(playerData.staminaAcc >= SETTING.staminaRegenSec && playerData.stamina < SETTING.maxStamina){
+    playerData.staminaAcc -= SETTING.staminaRegenSec;
+    playerData.stamina++;
+  }
+}
+function startExplore(zoneId){
+  const z = exploreConfig.find(x=>x.id===zoneId);
+  if(!z) return;
+  if(playerData.exploreZone){ toast("正在探险中"); return; }
+  if(playerData.level < z.unlockLevel){ toast("境界不足，无法前往"); return; }
+  if(playerData.stamina < z.staminaCost){ toast("体力不足"); return; }
+  playerData.stamina -= z.staminaCost;
+  playerData.exploreZone = zoneId;
+  playerData.exploreEndTime = Date.now() + z.duration*1000;
+  playerData.zoneVisited[zoneId] = (playerData.zoneVisited[zoneId]||0)+1;
+  saveSave(); renderUI();
+}
+function stopExplore(){
+  if(!playerData.exploreZone){ toast("当前未在探险"); return; }
+  playerData.exploreZone = "";
+  playerData.exploreEndTime = 0;
+  playerData.autoExplore = false;
+  saveSave(); renderUI();
+  toast("已中断探险");
+}
+function toggleAutoExplore(zoneId){
+  if(!zoneId){
+    playerData.autoExplore = false;
+    saveSave(); renderUI();
+    return;
+  }
+  if(playerData.autoExplore && playerData.autoZone === zoneId){
+    playerData.autoExplore = false;
   }else{
-    pillEl.style.display = "none";
+    playerData.autoExplore = true;
+    playerData.autoZone = zoneId;
+    if(!playerData.exploreZone) startExplore(zoneId);
   }
-
-  document.getElementById("buffDex").textContent =
-    m.dexTitle + " 图鉴" + playerData.dexCollected.length + "/" + dexConfig.length;
+  saveSave(); renderUI();
 }
-
-/* 轻量绑定：只更新带 data-bind 的文本 */
-function updateBindings(){
-  const nodes = document.querySelectorAll("[data-bind]");
-  for(let i=0;i<nodes.length;i++){
-    const node = nodes[i];
-    const key = node.getAttribute("data-bind");
-    if(key === "material") node.textContent = fmt(playerData.material);
-    else if(key === "spirit") node.textContent = fmt(playerData.spirit);
+function adStamina(){
+  if(playerData.adStaminaToday >= SETTING.adStaminaLimit){ toast("今日体力补充次数已用完"); return; }
+  showRewardAd(()=>{
+    playerData.adStaminaToday++;
+    playerData.stamina = Math.min(SETTING.maxStamina, playerData.stamina + 40);
+    saveSave(); renderUI();
+    toast("体力 +40");
+  });
+}
+function resolveBattle(){
+  const st = totalStats();
+  const foeLv = Math.max(1, playerData.level);
+  let myHp = st.hp, foeHp = 150 + foeLv*55;
+  const foeAtk = 15 + foeLv*10, foeDef = 8 + foeLv*6;
+  const elBonus = elementBonus(charElement(), elementConfig[foeLv%5].id);
+  let rounds = 0;
+  while(myHp > 0 && foeHp > 0 && rounds < 60){
+    rounds++;
+    foeHp -= Math.max(1, Math.floor((st.atk - foeDef*0.5) * elBonus * (0.9+Math.random()*0.2)));
+    if(foeHp <= 0) break;
+    myHp -= Math.max(1, Math.floor(foeAtk - st.def*0.5));
   }
+  return { win: foeHp<=0 && myHp>0, rounds };
 }
-
-function renderTabs(){
-  const nav = document.getElementById("tabs");
-  if(nav.children.length !== TABS.length){
-    nav.innerHTML = TABS.map(function(t){
-      return '<div class="tab" data-tab="' + t + '">' + t + '</div>';
-    }).join("");
-    nav.onclick = function(e){
-      const t = e.target.getAttribute("data-tab");
-      if(t && t !== currentTab){
-        currentTab = t;
-        renderAll();
-        window.scrollTo(0, 0);
+function settleExplore(z){
+  const pool = [];
+  for(const k in z.events){ for(let i=0;i<z.events[k];i++) pool.push(k); }
+  const ev = pool[Math.floor(Math.random()*pool.length)];
+  let msg = "";
+  switch(ev){
+    case "gather": {
+      const sp = eventSpiritReward(randInt(z.spirit));
+      const mat = Math.floor(randInt(z.material)*matGlobalRate());
+      playerData.spirit += sp; playerData.material += mat;
+      msg = `采集灵材 · 灵力 +${fmt(sp)}，仙材 +${mat}`;
+      break;
+    }
+    case "herb": {
+      const mat = Math.floor(randInt(z.material)*0.6*matGlobalRate());
+      const dg = Math.floor((3+playerData.level*0.6)*guildDregRate()*realmDregRate());
+      playerData.material += mat; playerData.dregs += dg;
+      msg = `采得灵药 · 仙材 +${mat}，丹渣 +${dg}`;
+      break;
+    }
+    case "beast": {
+      const r = resolveBattle();
+      if(r.win){
+        const sp = eventSpiritReward(Math.floor(randInt(z.spirit)*1.5));
+        playerData.spirit += sp;
+        msg = `击退妖兽 · 灵力 +${fmt(sp)}`;
+      }else{
+        const loss = Math.floor(playerData.spirit*0.03);
+        playerData.spirit -= loss;
+        msg = `不敌妖兽 · 灵力 -${fmt(loss)}`;
       }
+      break;
+    }
+    case "fortune": {
+      const n = 2 + Math.floor(Math.random()*3);
+      playerData.luckPoints += n;
+      gainInsight(2);
+      msg = `偶得机缘 · 气运 +${n}，感悟 +2`;
+      break;
+    }
+    case "hazard": {
+      const loss = Math.floor(playerData.spirit*0.05);
+      playerData.spirit -= loss;
+      msg = `遭遇凶险 · 灵力 -${fmt(loss)}`;
+      break;
+    }
+  }
+  if(Math.random() < 0.4){
+    const o = z.ore || "earth";
+    playerData.ore[o] = (playerData.ore[o]||0) + 1;
+    msg += `，${oreConfig[o].icon}${oreConfig[o].name} +1`;
+  }
+  if(Math.random() < 0.22){
+    let mid = z.matId;
+    if(mid === "random") mid = sectConfig[Math.floor(Math.random()*sectConfig.length)].id;
+    playerData.sectMaterials[mid] = (playerData.sectMaterials[mid]||0) + 1;
+    const sc = sectConfig.find(s=>s.id===mid);
+    msg += `，获得信物【${sc.matName}】×1`;
+  }
+  addExploreLog(msg);
+  guildQuestHook("explore");
+  checkConstitution();
+  saveSave();
+}
+function checkExploreComplete(){
+  if(!playerData.exploreZone) return;
+  if(Date.now() < playerData.exploreEndTime) return;
+  const z = exploreConfig.find(x=>x.id===playerData.exploreZone);
+  playerData.exploreZone = "";
+  playerData.exploreEndTime = 0;
+  if(z) settleExplore(z);
+  if(playerData.autoExplore && playerData.autoZone){
+    const nz = exploreConfig.find(x=>x.id===playerData.autoZone);
+    if(nz && playerData.stamina >= nz.staminaCost && playerData.level >= nz.unlockLevel){
+      startExplore(playerData.autoZone);
+    }else{
+      playerData.autoExplore = false;
+      addExploreLog("体力不足或境界不够，自动探险已停止");
+    }
+  }
+  renderUI();
+}
+
+/* ============================================================
+ *  十五、随机奇遇事件
+ * ============================================================ */
+function checkRandomEvent(){
+  if(playerData.eventPending) return;
+  if(Date.now() < playerData.eventCooldownUntil) return;
+  if(playerData.eventTodayCount >= SETTING.eventDailyLimit) return;
+  playerData.eventCheckAcc++;
+  if(playerData.eventCheckAcc < SETTING.eventCheckSec) return;
+  playerData.eventCheckAcc = 0;
+  if(Math.random() > SETTING.eventChance) return;
+  triggerRandomEvent();
+}
+function triggerRandomEvent(){
+  const cfg = randomEventConfig[Math.floor(Math.random()*randomEventConfig.length)];
+  playerData.eventPending = { id: cfg.id };
+  playerData.eventTodayCount++;
+  playerData.eventCooldownUntil = Date.now() + SETTING.eventCooldownSec*1000;
+  openEventModal();
+}
+function closeEventModal(){
+  const m = document.getElementById("eventModal");
+  if(m) m.remove();
+}
+function openEventModal(){
+  closeEventModal();
+  if(!playerData.eventPending) return;
+  const cfg = randomEventConfig.find(e=>e.id === playerData.eventPending.id);
+  if(!cfg){ playerData.eventPending = null; return; }
+  const mask = el("div","modal-mask"); mask.id = "eventModal";
+  const box = el("div","modal");
+  box.innerHTML = `<h3 style="color:${cfg.color}">${cfg.icon} ${cfg.title}</h3>
+    <div class="modal-desc">${cfg.desc}</div>`;
+  const acts = el("div","modal-actions");
+  acts.style.flexDirection = "column";
+  acts.style.alignItems = "stretch";
+  cfg.options.forEach(opt=>{
+    const b = el("button","btn");
+    b.style.textAlign = "left";
+    b.innerHTML = `<b>${opt.label}</b><div style="font-size:11px;color:var(--muted);margin-top:2px">${opt.desc}</div>`;
+    b.onclick = ()=>resolveEventOption(cfg, opt);
+    acts.appendChild(b);
+  });
+  box.appendChild(acts);
+  mask.appendChild(box);
+  document.body.appendChild(mask);
+}
+function resolveEventOption(cfg, opt){
+  const msgs = applyEventFx(opt.fx || []);
+  closeEventModal();
+  playerData.eventPending = null;
+  saveSave(); renderUI();
+  if(msgs.length) toast(msgs.join("　"));
+  else toast("此事便如此过去了");
+}
+function applyEventFx(fxList){
+  const msgs = [];
+  for(const fx of fxList){
+    switch(fx.type){
+      case "spirit": {
+        const sp = eventSpiritReward(fx.sec);
+        playerData.spirit += sp;
+        msgs.push(`灵力 +${fmt(sp)}`);
+        break;
+      }
+      case "material": {
+        const mt = eventMaterialReward(fx.n);
+        playerData.material += mt;
+        msgs.push(`仙材 +${mt}`);
+        break;
+      }
+      case "dregs": {
+        const d = Math.floor((fx.n||10) * guildDregRate() * realmDregRate());
+        playerData.dregs += d;
+        msgs.push(`丹渣 +${d}`);
+        break;
+      }
+      case "luck": {
+        playerData.luckPoints += fx.n;
+        msgs.push(`气运 +${fx.n}`);
+        break;
+      }
+      case "ore": {
+        const o = elementConfig[Math.floor(Math.random()*elementConfig.length)].id;
+        playerData.ore[o] = (playerData.ore[o]||0) + fx.n;
+        msgs.push(`${oreConfig[o].name} +${fx.n}`);
+        break;
+      }
+      case "insight": {
+        playerData.insight += fx.n;
+        msgs.push(`感悟 +${fx.n}`);
+        break;
+      }
+      case "spendMaterial": {
+        if(playerData.material < fx.amt){ msgs.push("仙材不足，未能成事"); break; }
+        playerData.material -= fx.amt;
+        msgs.push(`仙材 -${fx.amt}`);
+        break;
+      }
+      case "spendDregs": {
+        if(playerData.dregs < fx.amt){ msgs.push("丹渣不足，未能成事"); break; }
+        playerData.dregs -= fx.amt;
+        msgs.push(`丹渣 -${fx.amt}`);
+        break;
+      }
+      case "battle": {
+        const r = resolveBattle();
+        if(r.win){
+          const mt = eventMaterialReward(1.2);
+          playerData.material += mt;
+          msgs.push(`战斗胜利，仙材 +${mt}`);
+        }else{
+          const loss = Math.floor(playerData.spirit*0.06);
+          playerData.spirit -= loss;
+          msgs.push(`战斗失利，灵力 -${fmt(loss)}`);
+        }
+        break;
+      }
+      case "trap": {
+        if(Math.random() < fx.rate){
+          const loss = Math.floor(playerData.spirit*0.08);
+          playerData.spirit -= loss;
+          msgs.push(`触发陷阱，灵力 -${fmt(loss)}`);
+        }
+        break;
+      }
+      case "backlash": {
+        if(Math.random() < fx.rate){
+          const loss = Math.floor(playerData.spirit*0.10);
+          playerData.spirit -= loss;
+          msgs.push(`遭遇反噬，灵力 -${fmt(loss)}`);
+        }
+        break;
+      }
+      case "meetPartner": {
+        const p = meetPartner();
+        if(p) msgs.push(`结识【${p.name}】`);
+        else msgs.push("再无故人可结");
+        break;
+      }
+      case "pet": {
+        const free = petConfig.map((_,i)=>i).filter(i=>!playerData.pets.includes(i));
+        if(!free.length){ msgs.push("灵宠栏已满，幼兽自行离去"); break; }
+        const idx = free[Math.floor(Math.random()*free.length)];
+        playerData.pets.push(idx);
+        if(playerData.activePet < 0) playerData.activePet = idx;
+        msgs.push(`结缘灵宠【${petConfig[idx].icon}${petConfig[idx].name}】`);
+        break;
+      }
+      case "appointMentor": {
+        const m = appointMentor();
+        if(m) msgs.push(`拜入【${m.name}】门下`);
+        else msgs.push("已有师门");
+        break;
+      }
+      case "takeApprentice": {
+        const a = takeApprentice();
+        if(a) msgs.push(`收【${a.name}】为弟子`);
+        else msgs.push("已有弟子在侧");
+        break;
+      }
+      case "relicWeapon": {
+        const cfgA = artifactConfig[Math.floor(Math.random()*artifactConfig.length)];
+        const w = { aid:cfgA.id, name:cfgA.name, icon:cfgA.icon, color:cfgA.color,
+                    rate: 1 + (0.02 + Math.random()*0.03) };
+        playerData.weapons.push(w);
+        msgs.push(`重炼兵器【${w.name}】，产出 ×${w.rate.toFixed(3)}`);
+        break;
+      }
+    }
+  }
+  return msgs;
+}
+
+/* ============================================================
+ *  十六、视图渲染
+ * ============================================================ */
+let currentTab = "cultivate";
+const TABS = [
+  {id:"cultivate", name:"修行"},
+  {id:"secret",    name:"秘境"},
+  {id:"explore",   name:"探险"},
+  {id:"encounter", name:"奇遇"},
+  {id:"grow",      name:"养成"},
+  {id:"sect",      name:"宗门"},
+  {id:"reinc",     name:"转生"},
+];
+
+function buildTabs(){
+  const nav = document.getElementById("tabs");
+  if(!nav) return;
+  nav.innerHTML = "";
+  TABS.forEach(t=>{
+    const d = el("div","tab" + (currentTab===t.id?" active":""));
+    d.textContent = t.name;
+    d.onclick = ()=>{
+      if(currentTab === t.id) return;
+      currentTab = t.id;
+      renderUI();
+      window.scrollTo({top:0, behavior:"smooth"});
     };
-  }
-  const children = nav.children;
-  for(let i=0;i<children.length;i++){
-    children[i].classList.toggle("active", children[i].getAttribute("data-tab") === currentTab);
-  }
+    nav.appendChild(d);
+  });
 }
 
-function renderView(){
-  const wrap = document.getElementById("views");
-  const scrollY = window.scrollY;
-
-  wrap.innerHTML = "";
-  const v = el("div","view");
-  v.appendChild(buildView(currentTab));
-  wrap.appendChild(v);
-
-  updateBindings();
-  window.scrollTo(0, scrollY);
-}
-
-function renderAll(){
-  Mult.clear();
-  renderTabs();
-  renderView();
+function renderUI(){
+  if(!playerData) return;
+  buildTabs();
+  const container = document.getElementById("views");
+  if(!container) return;
+  const scrolls = [];
+  container.querySelectorAll(".scroll-box").forEach(b=>scrolls.push(b.scrollTop));
+  container.innerHTML = "";
+  const view = el("section","view active");
+  view.id = "view-" + currentTab;
+  const fn = VIEW_RENDERERS[currentTab];
+  if(fn){
+    try{ fn(view); }catch(e){ console.error(e); view.textContent = "渲染出错：" + e.message; }
+  }
+  container.appendChild(view);
+  container.querySelectorAll(".scroll-box").forEach((b,i)=>{ if(scrolls[i]!=null) b.scrollTop = scrolls[i]; });
   updateHeader();
 }
 
-function bindMaterial(){
-  return '<span data-bind="material">' + fmt(playerData.material) + '</span>';
+/* ===== 通用小工具 ===== */
+function mkCard(title, rightText){
+  const c = el("div","card");
+  if(title){
+    const h = el("h3");
+    h.textContent = title;
+    if(rightText){
+      const r = el("span");
+      r.style.cssText = "font-weight:400;font-size:12px;color:var(--muted)";
+      r.textContent = rightText;
+      h.appendChild(r);
+    }
+    c.appendChild(h);
+  }
+  return c;
+}
+function mkBar(cur, max, cls){
+  const b = el("div", cls || "prog-bar");
+  const i = el("i");
+  i.style.width = Math.max(0, Math.min(100, max>0 ? cur/max*100 : 0)) + "%";
+  b.appendChild(i);
+  return b;
+}
+function mkRow(name, desc, btnText, btnCls, onBtn, disabled){
+  const r = el("div","row");
+  const info = el("div","info");
+  const n = el("div","name"); n.innerHTML = name;
+  info.appendChild(n);
+  if(desc){
+    const d = el("div","desc"); d.innerHTML = desc;
+    info.appendChild(d);
+  }
+  r.appendChild(info);
+  if(btnText){
+    const b = el("button","btn " + (btnCls||""));
+    b.innerHTML = btnText;
+    b.disabled = !!disabled;
+    b.onclick = onBtn;
+    r.appendChild(b);
+  }
+  return r;
+}
+function mkHint(text){
+  const d = el("div","hint");
+  d.innerHTML = text;
+  return d;
 }
 
-function buildView(tab){
-  const box = el("div");
+/* ============================================================
+ *  十六-A：修行
+ * ============================================================ */
+function viewCultivate(root){
+  /* --- 境界 --- */
+  const c = mkCard("境界修行");
+  const cfg = levelConfig[playerData.level];
+  const next = levelConfig[playerData.level+1];
+  const line = el("div");
+  line.style.cssText = "font-size:18px;font-weight:700;color:var(--gold);margin-bottom:6px";
+  line.innerHTML = `${cfg.name}${next ? ' <span style="color:var(--muted);font-size:14px">→</span> ' + next.name : ""}`;
+  c.appendChild(line);
 
-  /* ---------------- 修行 ---------------- */
-  if(tab === "修行"){
-    const maxed = playerData.level >= levelConfig.length - 1;
-    const cfg = levelConfig[playerData.level];
+  if(next && !next.locked){
+    c.appendChild(mkBar(playerData.spirit, cfg.cost));
+    c.appendChild(mkHint(`突破需灵力 <b class="num">${fmt(cfg.cost)}</b> ／ 现有 <b class="num">${fmt(playerData.spirit)}</b>`));
+    if(next.req){
+      const req = next.req;
+      const parts = [
+        `转生 ${playerData.reincCount}/${req.reinc}`,
+        `秘境 ${playerData.secretMaxFloor}/${req.secret} 层`,
+        `仙材 ${fmt(playerData.material)}/${fmt(req.material)}`,
+        `丹渣 ${playerData.dregs}/${req.dregs}`
+      ];
+      if(req.luck) parts.push(`气运 ${playerData.luckPoints}/${req.luck}`);
+      c.appendChild(mkHint("突破前置：" + parts.join(" · ")));
+    }
+    const btn = el("button","btn gold");
+    btn.style.cssText = "width:100%;margin-top:10px;padding:11px";
+    btn.textContent = next.trib ? "⚡ 渡劫突破" : "突破境界";
+    btn.onclick = levelUp;
+    c.appendChild(btn);
+  }else{
+    c.appendChild(mkHint("已达当前版本顶点，渡劫境开发中。"));
+  }
+  root.appendChild(c);
 
-    const card = el("div","card");
-    card.innerHTML = "<h3>修行</h3>";
-    card.appendChild(row(
-      levelConfig[playerData.level].name,
-      maxed ? "已至版本巅峰，静待轮回" : "突破消耗灵力 " + fmt(cfg.cost),
-      maxed
-        ? '<span class="tag" style="color:var(--gold)">巅峰</span>'
-        : '<button class="btn gold" onclick="levelUp()">突破</button>'
+  /* --- 气运 --- */
+  const cl = mkCard("气运", luckConfig[playerData.luckIndex].name);
+  cl.appendChild(mkHint(
+    `当前气运倍率 <b style="color:var(--gold)">×${luckConfig[playerData.luckIndex].rate.toFixed(2)}</b>　` +
+    `气运值 <b class="num">${playerData.luckPoints}</b>` +
+    (playerData.luckLockedUntil > Date.now()
+      ? `<br>锁定剩余 ${fmtTime(playerData.luckLockedUntil - Date.now())}`
+      : `<br>自动更换剩余 ${fmtTime(playerData.luckEndTime - Date.now())}`)
+  ));
+  const lRow = el("div");
+  lRow.style.cssText = "display:flex;gap:8px;margin-top:8px;flex-wrap:wrap";
+  const b1 = el("button","btn gold");
+  b1.textContent = `抽取气运（${drawLuckCost()}）`;
+  b1.onclick = drawLuck;
+  const b2 = el("button","btn");
+  b2.textContent = `锁定 ${SETTING.luckLockMin} 分（${lockLuckCost()}）`;
+  b2.onclick = lockLuck;
+  lRow.appendChild(b1); lRow.appendChild(b2);
+  cl.appendChild(lRow);
+  root.appendChild(cl);
+
+  /* --- 广告加速 --- */
+  const ca = mkCard("灵力加速", `今日 ${playerData.adSpeedToday}/${SETTING.adSpeedDailyLimit}`);
+  ca.appendChild(mkHint(`观看广告立即获得 ${SETTING.adSpeedHour} 小时挂机灵力。`));
+  const ab = el("button","btn gold");
+  ab.style.cssText = "width:100%;margin-top:8px";
+  ab.textContent = "观看广告 · 加速";
+  ab.disabled = playerData.adSpeedToday >= SETTING.adSpeedDailyLimit;
+  ab.onclick = adSpeedUp;
+  ca.appendChild(ab);
+  root.appendChild(ca);
+
+  /* --- 灵根 --- */
+  const rc = rootConfig[playerData.rootIndex];
+  const cr = mkCard("灵根", rc.name);
+  cr.appendChild(mkHint(`当前倍率 <b style="color:${rc.color}">×${rc.rate.toFixed(2)}</b>　累计洗练 ${playerData.washRootTotal} 次`));
+  const rRow = el("div");
+  rRow.style.cssText = "display:flex;gap:8px;margin-top:8px;flex-wrap:wrap";
+  const r1 = el("button","btn gold");
+  r1.textContent = `仙材洗练（${fmt(rootMatCost())}）`;
+  r1.onclick = washRootByMaterial;
+  const r2 = el("button","btn");
+  r2.textContent = "广告洗练（高品质更易出）";
+  r2.onclick = washRootByAd;
+  rRow.appendChild(r1); rRow.appendChild(r2);
+  cr.appendChild(rRow);
+  root.appendChild(cr);
+
+  /* --- 丹药 --- */
+  const pc = mkCard("炼丹", playerData.pillActive && Date.now()<playerData.pillEndTime
+    ? `${pillConfig[playerData.pillIndex].name} 剩余 ${fmtTime(playerData.pillEndTime-Date.now())}` : "未服用");
+  const pbox = el("div");
+  pillConfig.forEach((p,i)=>{
+    pbox.appendChild(mkRow(
+      `${p.name} <span class="tag" style="color:var(--gold)">×${p.rate}</span>`,
+      `${fmtDur(p.duration/1000)}　消耗灵力 ${fmt(p.cost)}`,
+      "炼制", "gold", ()=>makePill(i), playerData.spirit < p.cost
     ));
-    card.appendChild(row(
-      "修炼加速",
-      "看广告获得 " + SETTING.adSpeedHour + " 小时挂机灵力（今日 " +
-        playerData.adSpeedToday + "/" + SETTING.adSpeedDailyLimit + " 次）",
-      playerData.adSpeedToday >= SETTING.adSpeedDailyLimit
-        ? '<button class="btn" disabled>次数用尽</button>'
-        : '<button class="btn" onclick="adSpeedUp()">加速修炼</button>'
+  });
+  pc.appendChild(pbox);
+  root.appendChild(pc);
+
+  /* --- 修炼功法 --- */
+  const sc = mkCard("修炼功法", `已习 ${playerData.skillUnlocked.length}/${skillConfig.length}`);
+  skillConfig.forEach((s,i)=>{
+    const owned = playerData.skillUnlocked.includes(i);
+    sc.appendChild(mkRow(
+      `${s.name} <span class="tag" style="color:var(--green)">×${s.rate}</span>`,
+      `习得消耗灵力 ${fmt(s.cost)}`,
+      owned ? "已习得" : "习得", owned ? "" : "gold",
+      ()=>unlockSkill(i), owned || playerData.spirit < s.cost
     ));
-    if(playerData._offlineGain > 0){
-      card.appendChild(row(
-        "离线收益",
-        "离线 " + fmtTime(playerData._offlineSec * 1000) +
-          "，获得灵力 " + fmt(playerData._offlineGain),
-        '<button class="btn gold" onclick="adDoubleOffline()">广告翻倍</button>'
+  });
+  root.appendChild(sc);
+
+  /* --- 装备强化 --- */
+  const ec = mkCard("随身法器");
+  equipConfig.forEach((e,i)=>{
+    const lv = playerData.equipLv[i]||0;
+    const cost = Math.floor(500*Math.pow(2.1, lv));
+    const cur = lv>0 ? (e.base + e.step*(lv-1)) : 1;
+    ec.appendChild(mkRow(
+      `${e.name} <span class="tag" style="color:var(--blue)">Lv.${lv}/${e.maxLv}</span>`,
+      `当前倍率 ×${cur.toFixed(3)}　强化消耗灵力 ${fmt(cost)}`,
+      lv>=e.maxLv ? "已满级" : "强化", "gold",
+      ()=>{
+        if(playerData.spirit < cost){ toast("灵力不足"); return; }
+        playerData.spirit -= cost;
+        playerData.equipLv[i] = lv+1;
+        checkAchievement(); saveSave(); renderUI();
+        toast(`【${e.name}】强化至 Lv.${lv+1}`);
+      },
+      lv>=e.maxLv || playerData.spirit < cost
+    ));
+  });
+  root.appendChild(ec);
+}
+
+/* ============================================================
+ *  十六-B：秘境
+ * ============================================================ */
+function viewSecret(root){
+  const c = mkCard("秘境挑战", `已通关 ${playerData.secretMaxFloor} 层`);
+  c.appendChild(mkHint(
+    `今日剩余挑战次数 <b style="color:var(--gold)">${playerData.secretTodayCount}</b>　` +
+    `（广告追加 ${playerData.adSecretToday}/${SETTING.adSecretDailyLimit}）`
+  ));
+  const b1 = el("button","btn gold");
+  b1.style.cssText = "width:100%;margin-top:10px;padding:11px";
+  b1.textContent = playerData.secretTodayCount>0 ? `挑战第 ${playerData.secretMaxFloor+1} 层` : "观看广告 · 补充次数";
+  b1.onclick = challengeSecret;
+  c.appendChild(b1);
+  root.appendChild(c);
+
+  const c2 = mkCard("秘境扫荡", `免费 ${playerData.sweepToday}/${SETTING.sweepFreeCount+realmSweepBonus()}`);
+  c2.appendChild(mkHint("按已通关层数折算灵力与仙材，不占用挑战次数。"));
+  const b2 = el("button","btn");
+  b2.style.cssText = "width:100%;margin-top:8px";
+  b2.textContent = "扫荡一次";
+  b2.onclick = sweepSecret;
+  c2.appendChild(b2);
+  root.appendChild(c2);
+
+  const c3 = mkCard("仙材翻倍");
+  const b3 = el("button","btn gold");
+  b3.style.cssText = "width:100%";
+  b3.textContent = "观看广告 · 秘境仙材翻倍";
+  b3.onclick = adDoubleSecretMat;
+  c3.appendChild(b3);
+  root.appendChild(c3);
+
+  const c4 = mkCard("灵物图鉴", getDexMilestone().title);
+  const box = el("div","scroll-box");
+  dexConfig.forEach((d,i)=>{
+    const got = playerData.dexCollected.includes(i);
+    box.appendChild(mkRow(
+      `<span style="color:${got?d.color:"var(--muted)"}">${got?"":"❔ "}${got?d.name:"未知灵物"}</span>`,
+      got ? `${d.desc}　倍率 ×${d.rate}` : `通关秘境第 ${d.floor+1} 层可收录`,
+      "", null, null, true
+    ));
+  });
+  c4.appendChild(box);
+  c4.appendChild(mkHint(`图鉴总倍率 ×${getDexTotalRate().toFixed(3)}`));
+  root.appendChild(c4);
+}
+
+/* ============================================================
+ *  十六-C：探险
+ * ============================================================ */
+function viewExplore(root){
+  /* 体力 */
+  const c = mkCard("体力", `${playerData.stamina}/${SETTING.maxStamina}`);
+  c.appendChild(mkBar(playerData.stamina, SETTING.maxStamina, "stamina-bar"));
+  c.appendChild(mkHint(
+    playerData.stamina < SETTING.maxStamina
+      ? `每 ${SETTING.staminaRegenSec} 秒恢复 1 点，约 ${fmtDur((SETTING.maxStamina-playerData.stamina)*SETTING.staminaRegenSec)} 回满`
+      : "体力已满"
+  ));
+  const ab = el("button","btn");
+  ab.style.cssText = "width:100%;margin-top:8px";
+  ab.textContent = `观看广告 · 体力 +40（${playerData.adStaminaToday}/${SETTING.adStaminaLimit}）`;
+  ab.disabled = playerData.adStaminaToday >= SETTING.adStaminaLimit;
+  ab.onclick = adStamina;
+  c.appendChild(ab);
+  root.appendChild(c);
+
+  /* 当前状态 */
+  if(playerData.exploreZone){
+    const z = exploreConfig.find(x=>x.id===playerData.exploreZone);
+    const cc = mkCard("探险中 · " + (z?z.name:""));
+    const left = Math.max(0, playerData.exploreEndTime - Date.now());
+    cc.appendChild(mkBar(z?z.duration*1000-left:0, z?z.duration*1000:1));
+    cc.appendChild(mkHint(`剩余 ${fmtTime(left)}`));
+    const sb = el("button","btn");
+    sb.style.cssText = "width:100%;margin-top:8px";
+    sb.textContent = "中断探险";
+    sb.onclick = stopExplore;
+    cc.appendChild(sb);
+    root.appendChild(cc);
+  }
+
+  /* 地图列表 */
+  const cm = mkCard("自由探险");
+  exploreConfig.forEach(z=>{
+    const unlocked = playerData.level >= z.unlockLevel;
+    const wrap = el("div","zone");
+    const ic = el("div","zone-icon");
+    ic.style.color = z.color;
+    ic.textContent = z.icon;
+    const body = el("div","zone-body");
+    const head = el("div","zone-head");
+    const nm = el("div","zone-name");
+    nm.textContent = z.name;
+    if(!unlocked){
+      nm.innerHTML += ` <span style="font-size:11px;color:var(--muted)">（需 ${levelConfig[z.unlockLevel].name}）</span>`;
+    }
+    const rk = el("div","zone-risk");
+    rk.style.color = z.riskColor;
+    rk.textContent = "风险 " + z.risk;
+    head.appendChild(nm); head.appendChild(rk);
+    body.appendChild(head);
+    const ds = el("div","zone-desc");
+    ds.textContent = z.desc;
+    body.appendChild(ds);
+    const meta = el("div","zone-desc");
+    meta.innerHTML = `体力 ${z.staminaCost}　耗时 ${z.duration}s　已探 ${playerData.zoneVisited[z.id]||0} 次`;
+    body.appendChild(meta);
+    const acts = el("div","zone-actions");
+    const b1 = el("button","btn gold");
+    b1.textContent = "前往探险";
+    b1.disabled = !unlocked || !!playerData.exploreZone || playerData.stamina < z.staminaCost;
+    b1.onclick = ()=>startExplore(z.id);
+    const autoOn = playerData.autoExplore && playerData.autoZone === z.id;
+    const b2 = el("button","btn" + (autoOn?" gold":""));
+    b2.textContent = autoOn ? "停止自动" : "自动循环";
+    b2.disabled = !unlocked;
+    b2.onclick = ()=>toggleAutoExplore(z.id);
+    acts.appendChild(b1); acts.appendChild(b2);
+    body.appendChild(acts);
+    wrap.appendChild(ic); wrap.appendChild(body);
+    cm.appendChild(wrap);
+  });
+  root.appendChild(cm);
+
+  /* 脱落本命法宝 */
+  if(playerData.droppedArtifacts.length){
+    const cd = mkCard("遗落的本命法宝");
+    playerData.droppedArtifacts.forEach((d,i)=>{
+      const zone = exploreConfig.find(z=>z.id===d.zone);
+      cd.appendChild(mkRow(
+        `<span style="color:${d.color}">${d.icon} ${d.name}</span>`,
+        `前世温养至 ${d.lv} 阶　遗落于 ${zone?zone.name:"未知"}　战力加成 ×${(1+0.015*(d.lv-1)).toFixed(3)}`,
+        "拾回", "gold", ()=>pickupDroppedArtifact(i)
+      ));
+    });
+    root.appendChild(cd);
+  }
+
+  /* 见闻日志 */
+  const clog = mkCard("探险见闻");
+  const lb = el("div","log");
+  if(!playerData.exploreLog.length) lb.innerHTML = '<div style="color:var(--muted)">暂无记录</div>';
+  playerData.exploreLog.forEach(t=>{
+    const d = el("div"); d.textContent = t; lb.appendChild(d);
+  });
+  clog.appendChild(lb);
+  root.appendChild(clog);
+}
+
+/* ============================================================
+ *  十六-D：奇遇（NPC / 伙伴 / 师徒）
+ * ============================================================ */
+function viewEncounter(root){
+  /* NPC */
+  const cn = mkCard("山野道友");
+  npcConfig.forEach(n=>{
+    const aff = npcAff(n.id);
+    const rank = npcRankOf(n.id);
+    const wrap = el("div","npc");
+    const av = el("div","npc-avatar");
+    av.style.color = n.color;
+    av.textContent = n.icon;
+    const body = el("div","npc-body");
+    const head = el("div","npc-head");
+    const nm = el("div","npc-name");
+    nm.innerHTML = `${n.name} <span class="npc-title">${n.title}</span>`;
+    const af = el("div","npc-aff");
+    af.textContent = `${rank.name} · ${aff}`;
+    head.appendChild(nm); head.appendChild(af);
+    body.appendChild(head);
+
+    const lineIdx = playerData.npcLine[n.id];
+    const line = el("div","npc-line");
+    line.textContent = lineIdx!=null ? n.lines[lineIdx] : n.intro;
+    body.appendChild(line);
+
+    const bar = el("div","aff-bar");
+    const bi = el("i");
+    bi.style.width = Math.min(100, aff/9*100) + "%";
+    bar.appendChild(bi);
+    body.appendChild(bar);
+
+    const acts = el("div","npc-actions");
+    const talk = el("button","btn");
+    talk.textContent = "闲谈";
+    talk.onclick = ()=>npcTalk(n.id);
+    const gift = el("button","btn gold");
+    gift.textContent = playerData.npcDailyGifted[n.id] ? "今日已领" : "领赠礼";
+    gift.disabled = !!playerData.npcDailyGifted[n.id];
+    gift.onclick = ()=>giftNpc(n.id);
+    acts.appendChild(talk); acts.appendChild(gift);
+    body.appendChild(acts);
+
+    wrap.appendChild(av); wrap.appendChild(body);
+    cn.appendChild(wrap);
+  });
+  root.appendChild(cn);
+
+  /* 伙伴 */
+  const cp = mkCard("同行伙伴", `${playerData.partners.length} 位`);
+  if(!playerData.partners.length){
+    cp.appendChild(mkHint("尚无结识的伙伴，可在奇遇事件「同道相逢」中结识。"));
+  }else{
+    playerData.partners.forEach(p=>{
+      const rel = partnerRel(p);
+      const wrap = el("div","npc");
+      const av = el("div","npc-avatar"); av.textContent = p.icon;
+      const body = el("div","npc-body");
+      const head = el("div","npc-head");
+      const nm = el("div","npc-name");
+      nm.innerHTML = `${p.name} <span class="npc-title">${p.sect}</span>`;
+      const af = el("div","npc-aff");
+      af.style.color = partnerRelColor(rel);
+      af.textContent = `${rel} · ${p.favor}`;
+      head.appendChild(nm); head.appendChild(af);
+      body.appendChild(head);
+      const line = el("div","npc-line"); line.textContent = p.note;
+      body.appendChild(line);
+      const bar = el("div","aff-bar");
+      const bi = el("i");
+      bi.style.width = Math.max(0, Math.min(100, (p.favor+100)/2)) + "%";
+      bar.appendChild(bi);
+      body.appendChild(bar);
+
+      const acts = el("div","npc-actions");
+      const mk = (txt, cls, fn)=>{
+        const b = el("button","btn " + (cls||""));
+        b.textContent = txt;
+        b.onclick = fn;
+        acts.appendChild(b);
+      };
+      mk("赠礼 50 仙材", "", ()=>giftPartner(p.uid));
+      mk("论道", "", ()=>discussPartner(p.uid));
+      mk("交易", "", ()=>tradePartner(p.uid));
+      if(rel !== "挚友" && rel !== "道侣") mk("结为挚友", "", ()=>makeFriend(p.uid));
+      if(rel !== "仇人") mk("反目", "", ()=>makeEnemy(p.uid));
+      if(rel === "挚友") mk("结为道侣", "gold", ()=>makeDaoLu(p.uid));
+      body.appendChild(acts);
+      wrap.appendChild(av); wrap.appendChild(body);
+      cp.appendChild(wrap);
+    });
+  }
+  root.appendChild(cp);
+
+  /* 师徒 */
+  const cm = mkCard("师门传承");
+  if(playerData.mentor){
+    const m = mentorConfig.find(x=>x.id===playerData.mentor.id);
+    if(m){
+      cm.appendChild(mkRow(
+        `${m.icon} ${m.name} <span class="tag" style="color:${m.color}">${m.title}</span>`,
+        `${m.desc}<br>师缘 ${playerData.mentor.bond||0}/100　今日请教 ${playerData.mentorAskToday}/1`,
+        m.askLabel, "gold", askMentor, playerData.mentorAskToday >= 1
       ));
     }
-    box.appendChild(card);
-
-    const m = Mult.get();
-    const c2 = el("div","card");
-    c2.innerHTML =
-      "<h3>当前总倍率</h3>" +
-      '<div class="hint">转生 ×' + m.reinc.toFixed(2) +
-        '　灵根 ×' + m.root.toFixed(2) +
-        '　功法 ×' + m.skill.toFixed(2) +
-        '　炼器 ×' + m.equip.toFixed(2) +
-        '　图鉴 ×' + m.dex.toFixed(2) + '</div>' +
-      '<div class="hint">在线另享 气运 ×' + m.luck.toFixed(2) +
-        '、丹药 ×' + m.pill.toFixed(2) + '；离线不计气运与丹药。</div>' +
-      '<div class="hint">离线收益上限 ' + SETTING.maxOfflineHour + ' 小时。</div>';
-    box.appendChild(c2);
-
-    const c3 = el("div","card");
-    c3.innerHTML = "<h3>气运</h3>";
-    c3.appendChild(row(
-      luckConfig[playerData.luckIndex].name,
-      "当前 ×" + luckConfig[playerData.luckIndex].rate.toFixed(2) +
-        " · " + fmtTime(playerData.luckEndTime - Date.now()) + "后刷新",
-      '<button class="btn" onclick="refreshLuckByAd()">广告刷新</button>'
-    ));
-    box.appendChild(c3);
-
-    const c4 = el("div","card");
-    c4.appendChild(row("重置游戏", "清空所有进度，仅用于测试", '<button class="btn" onclick="resetGame()">重置</button>'));
-    box.appendChild(c4);
+  }else{
+    cm.appendChild(mkHint("尚未拜师，可在奇遇事件「师门缘法」中拜入师门。"));
   }
+  if(playerData.apprentice){
+    const a = playerData.apprentice;
+    cm.appendChild(mkRow(
+      `🌱 ${a.name} <span class="tag" style="color:var(--green)">弟子</span>`,
+      `${a.note}<br>忠诚 ${a.loyalty}/100　每 5 分钟回馈一次灵力`,
+      "", null, null, true
+    ));
+  }else{
+    cm.appendChild(mkHint("尚无弟子。"));
+  }
+  root.appendChild(cm);
+}
 
-  /* ---------------- 秘境 ---------------- */
-  if(tab === "秘境"){
-    const next = playerData.secretMaxFloor;
-    const cleared = next >= secretConfig.length;
-    const canFree = playerData.secretTodayCount > 0;
-    const adLeft = SETTING.adSecretDailyLimit - playerData.adSecretToday;
+/* ============================================================
+ *  十六-E：养成（装备 / 功法 / 灵宠 / 本命 / 矿石）
+ * ============================================================ */
+function viewGrow(root){
+  const st = totalStats();
 
-    const card = el("div","card");
-    card.innerHTML =
-      "<h3>秘境探宝 <span style=\"font-size:12px;color:var(--muted)\">今日剩余 " +
-      playerData.secretTodayCount + " 次</span></h3>";
-
-    let btnHtml = "";
-    if(!cleared){
-      if(canFree) btnHtml = '<button class="btn gold" onclick="challengeSecret()">挑战</button>';
-      else if(adLeft > 0) btnHtml = '<button class="btn" onclick="challengeSecret()">广告+1次（' + adLeft + '）</button>';
-      else btnHtml = '<button class="btn" disabled>次数用尽</button>';
+  /* 装备 */
+  const ce = mkCard("装备", `攻 ${st.atk}　防 ${st.def}　血 ${st.hp}`);
+  equipSlots.forEach(s=>{
+    const it = playerData.loadout[s.id];
+    if(it){
+      ce.appendChild(mkRow(
+        `${s.icon} ${it.name} <span class="tag" style="color:${qualityConfig[it.quality].color}">${qualityConfig[it.quality].name}</span>`,
+        `${equipStatText(it)}　五行 ${elementOf(it.element).name}`,
+        "卸下", "", ()=>unequipItem(s.id)
+      ));
+    }else{
+      ce.appendChild(mkRow(`${s.icon} ${s.name}`, "空置", "", null, null, true));
     }
+  });
+  root.appendChild(ce);
 
-    card.appendChild(row(
-      "下一层",
-      cleared
-        ? "秘境已全部通关"
-        : "第 " + (next+1) + " 层 · 奖励灵力 " + fmt(secretConfig[next].reward),
-      btnHtml
-    ));
-
-    card.appendChild(row(
-      "仙材翻倍",
-      playerData.secretDoubleUsed ? "本次通关已使用" : "通关后看广告，额外领取一份仙材",
-      playerData.secretMaxFloor > 0 && !playerData.secretDoubleUsed
-        ? '<button class="btn" onclick="adDoubleSecretMat()">仙材翻倍</button>'
-        : '<button class="btn" disabled>暂不可用</button>'
-    ));
-
-    box.appendChild(card);
+  /* 背包 */
+  const cb = mkCard("行囊", `${playerData.inventory.length} 件`);
+  if(!playerData.inventory.length){
+    cb.appendChild(mkHint("暂无装备，秘境通关有几率获得。"));
+  }else{
+    const box = el("div","scroll-box");
+    playerData.inventory.forEach(it=>{
+      const r = el("div","row");
+      const info = el("div","info");
+      const n = el("div","name");
+      n.innerHTML = `${it.name} <span class="tag" style="color:${qualityConfig[it.quality].color}">${qualityConfig[it.quality].name}</span>`;
+      const d = el("div","desc");
+      d.innerHTML = `${equipStatText(it)}　五行 ${elementOf(it.element).name}`;
+      info.appendChild(n); info.appendChild(d);
+      r.appendChild(info);
+      const wrap = el("div");
+      wrap.style.cssText = "display:flex;gap:6px;flex:0 0 auto";
+      const b1 = el("button","btn gold"); b1.textContent = "穿戴";
+      b1.onclick = ()=>equipItem(it.uid);
+      const b2 = el("button","btn"); b2.textContent = "出售";
+      b2.onclick = ()=>sellItem(it.uid);
+      wrap.appendChild(b1); wrap.appendChild(b2);
+      r.appendChild(wrap);
+      box.appendChild(r);
+    });
+    cb.appendChild(box);
   }
+  root.appendChild(cb);
 
-  /* ---------------- 灵根 ---------------- */
-  if(tab === "灵根"){
-    const r = rootConfig[playerData.rootIndex];
-    const card = el("div","card");
-    card.innerHTML = "<h3>灵根</h3>";
-    card.appendChild(row(
-      '<span style="color:' + r.color + '">' + r.name + '</span>',
-      "灵根倍率 ×" + r.rate.toFixed(2) + "　累计洗练 " + playerData.washRootTotal + " 次",
-      '<button class="btn" onclick="washRoot()">广告洗练</button>'
-    ));
-    card.appendChild(row(
-      "灵根图鉴",
-      rootConfig.map(function(x){
-        return '<span style="color:' + x.color + '">' + x.name + ' ×' + x.rate.toFixed(2) + '</span>';
-      }).join("　"),
-      ""
-    ));
-    box.appendChild(card);
-  }
-
-  /* ---------------- 功法 ---------------- */
-  if(tab === "功法"){
-    const card = el("div","card");
-    card.innerHTML = "<h3>功法（永久，转生保留）</h3>";
-
-    for(let i=0;i<skillConfig.length;i++){
-      const cfg = skillConfig[i];
-      const owned = playerData.skillUnlocked.indexOf(i) >= 0;
-      const half = Math.floor(cfg.cost * 0.5);
-
-      let btn;
-      if(owned){
-        btn = '<span class="tag" style="color:var(--green)">已解锁</span>';
-      }else if(playerData.spirit >= cfg.cost){
-        btn = '<button class="btn" onclick="unlockSkill(' + i + ')">解锁</button>';
-      }else if(playerData.spirit >= half){
-        btn = '<button class="btn" onclick="unlockSkill(' + i + ')">半价解锁(广告)</button>';
-      }else{
-        btn = '<button class="btn" disabled>灵力不足</button>';
+  /* 战斗功法 */
+  const cs = mkCard("战斗功法", `感悟 ${playerData.insight}`);
+  battleSkillConfig.forEach((c,i)=>{
+    const owned = playerData.battleSkillUnlocked.includes(i);
+    const lv = owned ? skillLevel(i) : 0;
+    const active = playerData.battleSkill === i;
+    const r = el("div","row");
+    const info = el("div","info");
+    const n = el("div","name");
+    n.innerHTML = `${c.name} <span class="tag" style="color:${elementOf(c.element).color}">${elementOf(c.element).name}</span>` +
+      (owned ? `<span class="tag" style="color:var(--gold)">${lv} 重</span>` : "") +
+      (active ? `<span class="tag" style="color:var(--green)">已装备</span>` : "");
+    const d = el("div","desc");
+    d.innerHTML = `${c.desc}　攻+${c.atk} 防+${c.def} 血+${c.hp}　胜率 ×${c.rate}`;
+    info.appendChild(n); info.appendChild(d);
+    r.appendChild(info);
+    const wrap = el("div");
+    wrap.style.cssText = "display:flex;gap:6px;flex:0 0 auto;flex-wrap:wrap;justify-content:flex-end";
+    if(!owned){
+      const b = el("button","btn gold");
+      b.textContent = `习得(${fmt(c.cost)})`;
+      b.disabled = playerData.spirit < c.cost;
+      b.onclick = ()=>unlockBattleSkill(i);
+      const b2 = el("button","btn");
+      b2.textContent = `撰写(${c.insightCost}感悟)`;
+      b2.disabled = playerData.insight < c.insightCost;
+      b2.onclick = ()=>writeBattleSkill(i);
+      wrap.appendChild(b2); wrap.appendChild(b);
+    }else{
+      if(!active){
+        const b = el("button","btn"); b.textContent = "装备";
+        b.onclick = ()=>equipBattleSkill(i);
+        wrap.appendChild(b);
       }
+      const up = el("button","btn gold");
+      up.textContent = lv>=BATTLE_SKILL_MAX_LV ? "圆满" : `参悟(${skillUpgradeCost(lv)})`;
+      up.disabled = lv>=BATTLE_SKILL_MAX_LV || playerData.insight < skillUpgradeCost(lv);
+      up.onclick = ()=>upgradeBattleSkill(i);
+      wrap.appendChild(up);
+    }
+    r.appendChild(wrap);
+    cs.appendChild(r);
+  });
+  root.appendChild(cs);
 
-      card.appendChild(row(
-        cfg.name,
-        owned
-          ? "
+  /* 灵宠 */
+  const cp = mkCard("灵宠");
+  petConfig.forEach((p,i)=>{
+    const owned = playerData.pets.includes(i);
+    const active = playerData.activePet === i;
+    cp.appendChild(mkRow(
+      `${p.icon} ${p.name} <span class="tag" style="color:${elementOf(p.element).color}">${elementOf(p.element).name}</span>` +
+        (active ? '<span class="tag" style="color:var(--green)">出战</span>' : ""),
+      `${p.desc}　攻+${p.atk} 防+${p.def} 血+${p.hp}`,
+      owned ? (active?"收回":"出战") : `结缘(${fmt(p.cost)})`,
+      owned ? "" : "gold",
+      ()=> owned ? setActivePet(i) : recruitPet(i),
+      !owned && playerData.spirit < p.cost
+    ));
+  });
+  root.appendChild(cp);
+
+  /* 本命法宝 */
+  const ca = mkCard("本命法宝", playerData.artifactId
+    ? `${artifactConfig.find(a=>a.id===playerData.artifactId).name} ${playerData.artifactLv} 阶` : "未铸就");
+  if(!playerData.artifactId){
+    if(playerData.level < 5){
+      ca.appendChild(mkHint("筑基期（炼气圆满突破后）方可铸就本命法宝。"));
+    }else{
+      artifactConfig.forEach(a=>{
+        ca.appendChild(mkRow(
+          `${a.icon} ${a.name} <span class="tag" style="color:${a.color}">${elementOf(a.element).name}</span>`,
+          `${a.desc}　铸就需仙材 2000 · 丹渣 50`,
+          "铸就", "gold", ()=>forgeArtifact(a.id)
+        ));
+      });
+    }
+  }else{
+    const cfg = artifactConfig.find(a=>a.id===playerData.artifactId);
+    const lv = playerData.artifactLv;
+    const elx = playerData.artifactElement || cfg.element;
+    ca.appendChild(mkHint(
+      `当前倍率 <b style="color:var(--gold)">×${(cfg.base+cfg.step*(lv-1)).toFixed(3)}</b>　` +
+      `升至 ${lv+1} 阶需：仙材 ${fmt(artifactMatCost(lv))} · 丹渣 ${artifactDregCost(lv)}` +
+      (artifactLuckCost(lv) ? ` · 气运 ${artifactLuckCost(lv)}` : "") +
+      (artifactOreCost(lv) ? ` · ${oreConfig[elx].icon}${oreConfig[elx].name} ${artifactOreCost(lv)}` : "") +
+      `<br>温养至 ${ARTIFACT_YUANYING_LV} 阶后，转生时法宝将脱落留于地图，待后世回收。`
+    ));
+    const b = el("button","btn gold");
+    b.style.cssText = "width:100%;margin-top:8px";
+    b.textContent = lv >= cfg.maxLv ? "已至最高阶" : "温养提升";
+    b.disabled = lv >= cfg.maxLv;
+    b.onclick = upgradeArtifact;
+    ca.appendChild(b);
+  }
+  root.appendChild(ca);
+
+  /* 五行矿石 */
+  const co = mkCard("五行矿石");
+  elementConfig.forEach(e=>{
+    co.appendChild(mkRow(
+      `${oreConfig[e.id].icon} ${oreConfig[e.id].name}`,
+      `拥有 ${playerData.ore[e.id]||0}　用于高阶本命法宝温养`,
+      "", null, null, true
+    ));
+  });
+  root.appendChild(co);
+
+  /* 前世兵器 */
+  if(playerData.weapons.length){
+    const cw = mkCard("遗落神兵", `${playerData.weapons.length} 件`);
+    playerData.weapons.forEach(w=>{
+      cw.appendChild(mkRow(
+        `<span style="color:${w.color}">${w.icon} ${w.name}</span>`,
+        `产出倍率 ×${w.rate.toFixed(3)}（本轮有效，转生清空）`,
+        "", null, null, true
+      ));
+    });
+    root.appendChild(cw);
+  }
+}
+
+/* ============================================================
+ *  十六-F：宗门
+ * ============================================================ */
+function viewSect(root){
+  /* 宗门 */
+  const cg = mkCard("宗门", playerData.guild ? guildCfg().name : "未入宗门");
+  if(!playerData.guild){
+    cg.appendChild(mkHint("抵达炼气一层后可加入宗门。宗门身份永久保留，转生不清。"));
+    guildConfig.forEach(g=>{
+      const opt = el("div","sect-opt");
+      opt.innerHTML = `<div class="sect-icon" style="color:${g.color}">${g.icon}</div>
+        <div class="sect-info"><div class="sect-name">${g.name}</div>
+        <div class="sect-desc">${g.desc}</div></div>`;
+      const b = el("button","btn gold");
+      b.textContent = "加入";
+      b.disabled = playerData.level < 1;
+      b.onclick = ()=>joinGuild(g.id);
+      opt.appendChild(b);
+      cg.appendChild(opt);
+    });
+  }else{
+    const g = guildCfg();
+    const rank = guildRankConfig[guildRankIndex()];
+    cg.appendChild(mkHint(
+      `${g.icon} ${g.name}　职位：<b style="color:var(--gold)">${rank.name}</b>（全产出 ×${rank.rate.toFixed(2)}）<br>` +
+      `贡献 ${playerData.guildContrib}　累计 ${playerData.guildContribEarned}<br>` +
+      `今日委托：${playerData.guildQuestDone ? '<span style="color:var(--green)">已完成</span>' : '<span style="color:var(--orange)">未完成</span>'}（委托类型：${g.quest}）`
+    ));
+    const shop = el("div");
+    guildShopConfig.forEach(s=>{
+      shop.appendChild(mkRow(
+        s.name, `${s.desc}　消耗贡献 ${s.cost}`,
+        "兑换", "gold", ()=>buyGuildShop(s.id),
+        playerData.guildContrib < s.cost
+      ));
+    });
+    cg.appendChild(shop);
+  }
+  root.appendChild(cg);
+
+  /* 体质 */
+  const cc = mkCard("特殊体质", `${playerData.constitution.length}/${constitutionConfig.length}`);
+  constitutionConfig.forEach(c=>{
+    const got = constitutionUnlocked(c);
+    const cur = constitutionProgress(c);
+    cc.appendChild(mkRow(
+      `${c.icon} ${got ? c.name : "???"} ${got ? `<span class="tag" style="color:${c.color}">已解锁</span>` : ""}`,
+      got ? c.desc : `${c.hint}（${cur}/${c.cond.target}）`,
+      "", null, null, true
+    ));
+  });
+  root.appendChild(cc);
+
+  /* 成就 */
+  const ca = mkCard("成就", `${playerData.achClaimed.length}/${achievementConfig.length}`);
+  const abox = el("div","scroll-box");
+  achievementConfig.forEach(cfg=>{
+    const done = playerData.achCompleted.includes(cfg.id);
+    const claimed = playerData.achClaimed.includes(cfg.id);
+    abox.appendChild(mkRow(
+      `${done?"🏅":"🔒"} ${cfg.name}`,
+      `${cfg.desc}　奖励：灵力 ${fmt(cfg.rewardSpirit)} · 仙材 ${cfg.rewardMat}`,
+      claimed ? "已领取" : (done ? "领取" : "未达成"),
+      done && !claimed ? "gold" : "",
+      ()=>{
+        if(!done || claimed) return;
+        playerData.achClaimed.push(cfg.id);
+        playerData.spirit += cfg.rewardSpirit;
+        playerData.material += cfg.rewardMat;
+        saveSave(); renderUI();
+        toast(`领取成就【${cfg.name}】奖励`);
+      },
+      !done || claimed
+    ));
+  });
+  ca.appendChild(abox);
+  root.appendChild(ca);
+
+  /* 日常 */
+  const cd = mkCard("每日任务");
+  dailyTaskConfig.forEach((t,i)=>{
+    const done = playerData.dailyProgress[i] >= t.target;
+    const claimed = playerData.dailyClaimed[i];
+    const prog = Math.min(playerData.dailyProgress[i], t.target);
+    cd.appendChild(mkRow(
+      `${t.name} <span class="tag" style="color:var(--muted)">${prog}/${t.target}</span>`,
+      `${t.desc}　奖励：灵力 ${fmt(t.rewardSpirit)} · 仙材 ${t.rewardMat}`,
+      claimed ? "已领取" : (done ? "领取" : "进行中"),
+      done && !claimed ? "gold" : "",
+      ()=>{
+        if(!done || claimed) return;
+        playerData.dailyClaimed[i] = true;
+        playerData.spirit += t.rewardSpirit;
+        playerData.material += t.rewardMat;
+        playerData.luckPoints += SETTING.luckPerDaily;
+        saveSave(); renderUI();
+        toast(`领取日常【${t.name}】`);
+      },
+      !done || claimed
+    ));
+  });
+  root.appendChild(cd);
+}
+
+/* ============================================================
+ *  十六-G：转生
+ * ============================================================ */
+function viewReinc(root){
+  const c = mkCard("轮回转生", `${playerData.reincCount} 转`);
+  c.appendChild(mkHint(
+    `当前：<b style="color:var(--gold)">${reincConfig[playerData.reincCount].name}</b>　灵力总倍率 ×${getReincTotalRate().toFixed(2)}<br>` +
+    `传承点 <b class="num">${playerData.reincPoints}</b>　历劫：成功 ${playerData.tribWin} · 失败 ${playerData.tribFail}<br>` +
+    `转生条件：境界达 <b>${levelConfig[MAX_PLAYABLE_LEVEL].name}</b>（当前 ${levelConfig[playerData.level].name}）`
+  ));
+  const b = el("button","btn gold");
+  b.style.cssText = "width:100%;margin-top:10px;padding:11px";
+  b.textContent = "踏入轮回";
+  b.disabled = playerData.level < MAX_PLAYABLE_LEVEL;
+  b.onclick = doReincarnate;
+  c.appendChild(b);
+  root.appendChild(c);
+
+  /* 出身 */
+  if(playerData.origin){
+    const co = mkCard("此世出身", playerData.origin.name);
+    const o = playerData.origin;
+    co.appendChild(mkHint(
+      `<b style="color:${o.color}">${o.icon} ${o.name}</b><br>${o.desc}<br>` +
+      `在线 ×${o.mods.online||1}　离线 ×${o.mods.offline||1}　攻 +${o.mods.atk||0}　防 +${o.mods.def||0}　血 +${o.mods.hp||0}`
+    ));
+    root.appendChild(co);
+  }
+
+  /* 传承线 */
+  const ch = mkCard("传承线", `传承点 ${playerData.reincPoints}`);
+  heritageConfig.forEach(h=>{
+    const lv = playerData.heritage[h.id]||0;
+    const cost = lv+1;
+    ch.appendChild(mkRow(
+      `${h.name} <span class="tag" style="color:var(--gold)">${lv}/${h.maxLv}</span>`,
+      `${h.desc}${h.id==="luck" ? `（已减免 ${2*lv} 点）` : ""}${lv>=h.maxLv?"　已满级":""}`,
+      lv>=h.maxLv ? "满级" : `升级(${cost}点)`,
+      lv>=h.maxLv ? "" : "gold",
+      ()=>buyHeritage(h.id),
+      lv>=h.maxLv || playerData.reincPoints < cost
+    ));
+  });
+  root.appendChild(ch);
+
+  /* 修炼体系 */
+  const cs = mkCard("修炼体系", playerData.sect ? sectConfig.find(s=>s.id===playerData.sect).name : "散修");
+  cs.appendChild(mkHint(
+    playerData.sect
+      ? (()=>{
+          const s = sectConfig.find(x=>x.id===playerData.sect);
+          let extra = "";
+          if(playerData.sect==="sword") extra = `　剑势 ${swordStack()}/${realmSwordCap()} 层`;
+          if(playerData.sect==="body")  extra = `　淬体 ${bodyStack()}/${realmBodyCap()} 层`;
+          return `${s.icon} ${s.name}：${s.desc}${extra}`;
+        })()
+      : "尚未拜入道途，突破筑基境时可凭信物选择。"
+  ));
+  if(!playerData.sect){
+    const arr = sectConfig.map(s=>`${s.matName} ${sectMaterialCount(s.id)}/${SECT_MAT_NEED}`);
+    cs.appendChild(mkHint("信物进度：" + arr.join("　")));
+    if(playerData.level >= 5){
+      const bb = el("button","btn gold");
+      bb.style.cssText = "width:100%;margin-top:8px";
+      bb.textContent = "选择修炼体系";
+      bb.onclick = openSectSelect;
+      cs.appendChild(bb);
+    }
+  }
+  root.appendChild(cs);
+}
+
+/* ============================================================
+ *  十六-H：视图注册
+ * ============================================================ */
+const VIEW_RENDERERS = {
+  cultivate: viewCultivate,
+  secret:    viewSecret,
+  explore:   viewExplore,
+  encounter: viewEncounter,
+  grow:      viewGrow,
+  sect:      viewSect,
+  reinc:     viewReinc,
+};
+
+/* ============================================================
+ *  十七、顶栏刷新
+ * ============================================================ */
+function updateHeader(){
+  const sp = document.getElementById("spirit");
+  if(sp) sp.textContent = fmt(playerData.spirit);
+  const ps = document.getElementById("perSec");
+  if(ps) ps.textContent = fmt(getSpiritPerSec()) + "/s";
+  const ln = document.getElementById("levelName");
+  if(ln) ln.textContent = levelConfig[playerData.level].name;
+  const cp = document.getElementById("cp");
+  if(cp) cp.textContent = fmt(getCombatPower());
+
+  const b = document.getElementById("buffs");
+  if(!b) return;
+  b.innerHTML = "";
+  const add = (txt, color)=>{
+    const d = el("div","buff");
+    if(color) d.style.color = color;
+    d.textContent = txt;
+    b.appendChild(d);
+  };
+  add(`气运·${luckConfig[playerData.luckIndex].name}`, "var(--gold)");
+  if(playerData.pillActive && Date.now() < playerData.pillEndTime)
+    add(`丹药 ×${getPillRate().toFixed(2)} 剩${fmtTime(playerData.pillEndTime-Date.now())}`, "var(--green)");
+  if(playerData.sect){
+    const s = sectConfig.find(x=>x.id===playerData.sect);
+    add(s.name, s.color);
+  }
+  if(playerData.guild){
+    const g = guildCfg();
+    add(g.name + "·" + guildRankConfig[guildRankIndex()].name, g.color);
+  }
+  if(playerData.mentor){
+    const m = mentorConfig.find(x=>x.id===playerData.mentor.id);
+    if(m) add("师承·" + m.name, m.color);
+  }
+  if(playerData.origin) add(playerData.origin.icon + playerData.origin.name, playerData.origin.color);
+  if(playerData.artifactId){
+    const a = artifactConfig.find(x=>x.id===playerData.artifactId);
+    if(a) add(`${a.name} ${playerData.artifactLv}阶`, a.color);
+  }
+  if(playerData.insight > 0) add(`感悟 ${playerData.insight}`, "var(--purple)");
+  add(`仙材 ${fmt(playerData.material)}`, "var(--muted)");
+  add(`丹渣 ${playerData.dregs}`, "var(--muted)");
+  add(`气运值 ${playerData.luckPoints}`, "var(--muted)");
+}
+
+/* ============================================================
+ *  十八、主循环与启动
+ * ============================================================ */
+let _saveAcc = 0;
+let _started = false;
+
+function gameTick(){
+  if(!_started) return;
+  try{
+    checkDailyReset();
+    tickOnlineTime();
+    regenStamina();
+    checkExploreComplete();
+    checkLuck();
+
+    // 在线灵力产出
+    playerData.spirit += getSpiritPerSec();
+
+    // 丹药到期
+    if(playerData.pillActive && Date.now() > playerData.pillEndTime) playerData.pillActive = false;
+
+    checkRandomEvent();
+    checkAchievement();
+    checkConstitution();
+
+    updateHeader();
+    renderUI();
+
+    _saveAcc++;
+    if(_saveAcc >= 5){ _saveAcc = 0; saveSave(); }
+  }catch(e){
+    console.error("tick error", e);
+  }
+}
+
+function buildQiField(){
+  const field = document.getElementById("qiField");
+  if(!field) return;
+  const n = 22;
+  for(let i=0;i<n;i++){
+    const d = el("div","qi" + (Math.random()<0.4?" cyan":""));
+    const size = 4 + Math.random()*10;
+    d.style.width = size + "px";
+    d.style.height = size + "px";
+    d.style.left = (Math.random()*100) + "%";
+    d.style.animationDuration = (7 + Math.random()*9) + "s";
+    d.style.animationDelay = (Math.random()*8) + "s";
+    field.appendChild(d);
+  }
+}
+
+function enterGame(){
+  const sp = document.getElementById("splash");
+  if(sp){
+    sp.style.opacity = "0";
+    setTimeout(()=>{ sp.style.display = "none"; }, 400);
+  }
+  _started = true;
+  // 新手礼包
+  if(!playerData._welcomed){
+    playerData._welcomed = true;
+    playerData.spirit += 200;
+    playerData.material += 100;
+    setTimeout(()=>toast("初入仙道，赠灵力 200 · 仙材 100"), 600);
+  }
+  renderUI();
+}
+
+function boot(){
+  buildQiField();
+  loadSave(()=>{
+    if(playerData._offlineGain && playerData._offlineGain > 1){
+      setTimeout(()=>toast(`离线修行所得 ${fmt(playerData._offlineGain)} 灵力`), 900);
+    }
+    buildTabs();
+    renderUI();
+    updateHeader();
+    _started = true;
+    setInterval(gameTick, 1000);
+    window.addEventListener("beforeunload", saveSave);
+    document.addEventListener("visibilitychange", ()=>{
+      if(document.hidden) saveSave();
+      else playerData.onlineTickLast = Date.now();
+    });
+  });
+}
+
+window.addEventListener("DOMContentLoaded", boot);
+</script>
+</body>
+</html>
